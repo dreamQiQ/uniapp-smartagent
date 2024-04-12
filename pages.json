@@ -25,6 +25,13 @@
 			}
 		},
 		{
+			"path": "pages/me/register",
+			"style": {
+				"navigationBarTitleText": "注册账号",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
 			"path": "pages/me/me",
 			"style": {
 				"navigationBarTitleText": "我的",

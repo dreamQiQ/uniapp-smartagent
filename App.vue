@@ -10,7 +10,7 @@ export default {
           //#ifdef APP-PLUS
           plus.navigator.closeSplashscreen()
           //#endif
-        },
+        }
       })
     }
   },
@@ -19,13 +19,22 @@ export default {
   },
   onHide: function () {
     console.log('App Hide')
-  },
+  }
 }
 </script>
 
 <style lang="scss">
 /*每个页面公共css */
 @import 'uview-ui/index.scss';
+
+uni-page-body,
+html,
+body {
+  height: 100%;
+}
+uni-page-body {
+  overflow-y: auto;
+}
 
 .mb-16 {
   margin-bottom: 16px;
