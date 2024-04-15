@@ -36,7 +36,7 @@ import { list } from '@/api/video.js'
 export default {
   data() {
     return {
-      datas: [],
+      datas: []
     }
   },
   async mounted() {
@@ -66,13 +66,13 @@ export default {
     scrolltolower() {},
     upload() {
       uni.navigateTo({
-        url: '/pages/video/upload',
+        url: '/pages/video/upload'
       })
     },
     player(item) {
       uni.setStorageSync('video', item)
       uni.navigateTo({
-        url: '/pages/video/player',
+        url: '/pages/video/player'
       })
     },
     toShare(item) {
@@ -85,16 +85,16 @@ uni.shareWithSystem({
       })
 			*/
       plus.share.sendWithSystem(
-        {  href: 'https://www.dcloud.io/' },
+        { href: 'https://www.dcloud.io/' },
         function () {
           console.log('分享成功')
         },
         function (e) {
           console.log('分享失败：' + JSON.stringify(e))
-        },
+        }
       )
-    },
-  },
+    }
+  }
 }
 </script>
 

@@ -1,39 +1,44 @@
 <template>
   <view class="register">
     <view class="title">请填写基本信息</view>
-    <uni-forms ref="form" :modelValue="formData" label-position="top">
-      <uni-forms-item label="邮箱" name="username">
-        <uni-easyinput v-model="formData.username" focus class="uni-input-custom" type="text" :inputBorder="false" :clearable="false" :placeholderStyle="placeholderStyle" placeholder="请输入邮箱" />
-      </uni-forms-item>
-      <uni-forms-item label="密码" name="password">
-        <uni-easyinput class="uni-input-custom" v-model="formData.password" type="password" :inputBorder="false" :clearable="false" :placeholderStyle="placeholderStyle" placeholder="请输入密码" />
-      </uni-forms-item>
-      <uni-forms-item label="确认密码" name="confirm">
-        <uni-easyinput v-model="formData.confirm" class="uni-input-custom" type="password" :inputBorder="false" :clearable="false" :placeholderStyle="placeholderStyle" placeholder="请再次输入密码" />
-      </uni-forms-item>
-      <uni-forms-item label="英文名" name="nickName">
-        <uni-easyinput v-model="formData.nickName" class="uni-input-custom" type="text" :inputBorder="false" :clearable="false" :placeholderStyle="placeholderStyle" placeholder="请输入英文名" />
-      </uni-forms-item>
-      <uni-forms-item label="手机号" name="mobile" class="mobile-input">
-        <span class="mobile-before">+1</span>
-        <uni-easyinput v-model="formData.mobile" class="uni-input-custom" type="text" :inputBorder="false" :clearable="false" :placeholderStyle="placeholderStyle" placeholder="请输入手机号" />
-      </uni-forms-item>
-      <uni-forms-item label="执照号" name="licenseNumber">
-        <uni-easyinput
+    <u-form ref="form" :model="formData" labelPosition="top" labelWidth="auto" :labelStyle="labelStyle">
+      <u-form-item label="邮箱" prop="username">
+        <u-input v-model="formData.username" focus color="#9e9e9e" fontSize="32rpx" type="text" :placeholderStyle="placeholderStyle" placeholder="请输入邮箱" />
+      </u-form-item>
+      <u-form-item label="密码" prop="password">
+        <u-input color="#9e9e9e" fontSize="32rpx" v-model="formData.password" type="password" :placeholderStyle="placeholderStyle" placeholder="请输入密码" />
+      </u-form-item>
+      <u-form-item label="确认密码" prop="confirm">
+        <u-input v-model="formData.confirm" color="#9e9e9e" fontSize="32rpx" type="password" :placeholderStyle="placeholderStyle" placeholder="请再次输入密码" />
+      </u-form-item>
+      <u-form-item label="英文名" prop="nickName">
+        <u-input v-model="formData.nickName" color="#9e9e9e" fontSize="32rpx" type="text" :placeholderStyle="placeholderStyle" placeholder="请输入英文名" />
+      </u-form-item>
+      <u-form-item label="手机号" prop="mobile" class="mobile-input">
+        <u-input v-model="formData.mobile" color="#9e9e9e" fontSize="32rpx" type="text" :placeholderStyle="placeholderStyle" placeholder="请输入手机号">
+          <u--text text="+1" slot="prefix" margin="0 3px 0 0" type="tips"></u--text>
+        </u-input>
+      </u-form-item>
+      <u-form-item label="执照号" prop="licenseNumber">
+        <u-input
           v-model="formData.licenseNumber"
           focus
-          class="uni-input-custom"
+          color="#9e9e9e"
+          fontSize="32rpx"
           type="text"
           :inputBorder="false"
           :clearable="false"
           :placeholderStyle="placeholderStyle"
           placeholder="请输入执照号"
         />
-      </uni-forms-item>
-      <uni-forms-item label="行业" name="industry">
-        <uni-data-select v-model="formData.industry" class="uni-input-custom" :localdata="range" placement="top" :clear="false" placeholder="请选择行业"></uni-data-select>
-      </uni-forms-item>
-    </uni-forms>
+      </u-form-item>
+      <u-form-item label="行业" prop="industry" @click="industryShow = true">
+        <u-input v-model="formData.industry" color="#9e9e9e" fontSize="32rpx" type="text" :placeholderStyle="placeholderStyle" placeholder="请选择行业">
+          <u-icon slot="suffix" name="arrow-right"></u-icon>
+        </u-input>
+      </u-form-item>
+      <u-picker :show="industryShow" :columns="industryColumns" :closeOnClickOverlay="true" @close="industryShow = false" @cancel="industryShow = false" @confirm="confirm"></u-picker>
+    </u-form>
     <button class="subButton" :class="{ disabledBtn: disabledBtn }" @click="submit">登录</button>
   </view>
 </template>
@@ -53,68 +58,49 @@ export default {
         licenseNumber: '',
         industry: ''
       },
-      range: [
-        { value: '保险', text: '保险' },
-        { value: '法律', text: '法律' },
-        { value: '房产置业', text: '房产置业' },
-        { value: '移民', text: '移民' },
-        { value: '财税', text: '财税' },
-        { value: '工作创业', text: '工作创业' },
-        { value: '生活', text: '生活' }
-      ],
       rules: {
-        username: {
-          rules: [
-            { required: true, errorMessage: '请输入邮箱' },
-            { format: 'email', errorMessage: '请输入正确的邮箱' }
-          ]
-        },
-        password: {
-          rules: [
-            { required: true, errorMessage: '请输入密码' },
-            { minLength: 6, maxLength: 20, errorMessage: '请输入正确的密码' }
-          ]
-        },
-        confirm: {
-          rules: [
-            { required: true, errorMessage: '请输入密码' },
-            { minLength: 6, maxLength: 20, errorMessage: '请输入正确的密码' },
-            {
-              validateFunction(rule, value, data, callback) {
-                if (value !== that.formData.password) {
-                  console.log(value, that.formData.password)
-                  debugger
-                  callback('两次输入的密码不一致')
-                }
-                return true
-              }
-            }
-          ]
-        },
-        nickName: {
-          rules: [{ required: true, errorMessage: '请输入英文名' }]
-        },
-        licenseNumber: {
-          rules: [{ required: true, errorMessage: '请输入执照号' }]
-        },
-        mobile: {
-          rules: [
-            { required: true, errorMessage: '请输入手机号' },
-            {
-              validateFunction(rule, value, data, callback) {
-                let reg = /^(0|86|17951)?(13[0-9]|15[012356789]|166|17[3678]|18[0-9]|14[57])[0-9]{8}$/
-                if (!reg.test(value)) {
-                  debugger
-                  callback('请输入正确的手机号')
-                }
-                debugger
-                return true
-              }
-            }
-          ]
-        }
+        username: [
+          { required: true, message: '请输入邮箱' },
+          { type: 'email', message: '请输入正确的邮箱', trigger: 'change' }
+        ],
+        password: [
+          { required: true, message: '请输入密码' },
+          { min: 6, max: 20, message: '密码长度在6到20个字符之间', trigger: 'change' }
+        ],
+        confirm: [
+          { required: true, message: '请输入密码' },
+          { min: 6, max: 20, message: '密码长度在6到20个字符之间', trigger: 'change' },
+          {
+            validator(rule, value, callback) {
+              return value === that.formData.password
+            },
+            message: '两次输入的密码不一致',
+            trigger: 'change'
+          }
+        ],
+        nickName: [{ required: true, message: '请输入英文名' }],
+        licenseNumber: [{ required: true, message: '请输入执照号' }],
+        mobile: [
+          { required: true, message: '请输入手机号' },
+          {
+            validator(rule, value, callback) {
+              let reg = /^(0|86|17951)?(13[0-9]|15[012356789]|166|17[3678]|18[0-9]|14[57])[0-9]{8}$/
+              return reg.test(value)
+            },
+            message: '请输入正确的手机号',
+            trigger: 'change'
+          }
+        ]
       },
-      placeholderStyle: 'color: #ccc; font-size: 32rpx;'
+      placeholderStyle: 'color: #ccc; font-size: 32rpx;',
+      labelStyle: {
+        color: '#333333',
+        fontSize: '32rpx',
+        fontWeight: 'bold',
+        marginBottom: '16rpx'
+      },
+      industryShow: false,
+      industryColumns: [['保险', '法律', '房产置业', '移民', '财税', '工作创业', '生活']]
     }
   },
   computed: {
@@ -162,6 +148,10 @@ export default {
         this.$refs.form.resetFields()
         uni.reLaunch({ url: '/pages/me/login' })
       }
+    },
+    confirm(data) {
+      this.formData.industry = data.value[0]
+      this.industryShow = false
     }
   },
   components: {}
@@ -180,56 +170,15 @@ export default {
     margin-bottom: 32rpx;
   }
 
-  .mobile-input .uni-forms-item__content {
-    color: #666;
-    font-size: 28rpx;
-    display: flex;
-    align-items: center;
-    .mobile-before {
-      margin-right: 32rpx;
-    }
-  }
-
-  .uni-forms-item {
-    margin-bottom: 40rpx;
-    .uni-forms-item__label {
-      color: #333333;
-      font-size: 32rpx;
-      font-weight: 600;
-    }
-
-    .uni-input-custom {
-      input {
-        width: 100%;
-        height: 88rpx;
-        display: flex;
-        color: #9e9e9e;
-        font-size: 32rpx;
-        padding: 20rpx 4rpx;
-        box-sizing: border-box;
-        align-items: center;
-        border-radius: 16rpx;
-        background-color: #f5f7fa;
-        font-size: 32rpx;
-        background-color: #f5f7fa;
-      }
-      .uni-select {
-        width: 100%;
-        height: 88rpx;
-        display: flex;
-        font-size: 32rpx;
-        box-sizing: border-box;
-        align-items: center;
-        border-radius: 16rpx;
-        background-color: #f5f7fa;
-        font-size: 32rpx;
-        background-color: #f5f7fa;
-        border: none;
-        .uni-select__input-text {
-          color: #9e9e9e;
-        }
-      }
-    }
+  .u-input {
+    width: 100%;
+    height: 88rpx;
+    color: #9e9e9e;
+    font-size: 32rpx;
+    padding: 0rpx 24rpx !important;
+    box-sizing: border-box;
+    border-radius: 16rpx;
+    background-color: #f5f7fa;
   }
 
   .subButton {
@@ -243,6 +192,7 @@ export default {
     border-radius: 16rpx;
     background-color: #fdb03c;
     margin-bottom: 16rpx;
+    margin-top: 28rpx;
 
     &:after {
       border: 1px solid transparent;

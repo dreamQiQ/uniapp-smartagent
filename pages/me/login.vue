@@ -3,24 +3,16 @@
     <img class="logo" src="@/static/svg/logo.svg" alt="logo" />
     <view class="title">Smart AgentZ</view>
 
-    <uni-forms ref="form" :modelValue="formData" :rules="rules">
-      <uni-forms-item name="username">
-        <uni-easyinput
-          v-model="formData.username"
-          focus
-          class="uni-input-custom"
-          type="text"
-          :inputBorder="false"
-          :clearable="false"
-          :placeholderStyle="placeholderStyle"
-          placeholder="请输入绑定的邮箱"
-        />
-      </uni-forms-item>
-      <uni-forms-item name="password">
-        <uni-easyinput class="uni-input-custom" v-model="formData.password" type="password" :inputBorder="false" :clearable="false" :placeholderStyle="placeholderStyle" placeholder="请输入密码" />
-      </uni-forms-item>
-    </uni-forms>
-    <button class="subButton" :class="{ disabledBtn: disabledBtn }" @click="submit">提交注册</button>
+    <u-form ref="form" :model="formData" :rules="rules" labelPosition="top">
+      <u-form-item prop="username">
+        <u-input v-model="formData.username" color="#9e9e9e" fontSize="32rpx" :focus="true" type="text" border="none" :placeholderStyle="placeholderStyle" placeholder="请输入绑定的邮箱"></u-input>
+      </u-form-item>
+      <u-form-item prop="password">
+        <u-input v-model="formData.password" color="#9e9e9e" fontSize="32rpx" type="password" border="none" :placeholderStyle="placeholderStyle" placeholder="请输入密码"></u-input>
+      </u-form-item>
+    </u-form>
+
+    <button class="subButton" :class="{ disabledBtn: disabledBtn }" @click="submit">登录</button>
     <p class="reset-password">忘记密码</p>
     <p class="register" @click="register">注册新账户</p>
   </view>
@@ -37,18 +29,30 @@ export default {
         password: ''
       },
       rules: {
-        username: {
-          rules: [
-            { required: true, errorMessage: '请输入正确的邮箱' },
-            { format: 'email', errorMessage: '请输入正确的邮箱' }
-          ]
-        },
-        password: {
-          rules: [
-            { required: true, errorMessage: '请输入正确的密码' },
-            { minLength: 6, maxLength: 20, errorMessage: '请输入正确的密码' }
-          ]
-        }
+        username: [
+          {
+            required: true,
+            message: '请输入邮箱',
+            trigger: 'change'
+          },
+          {
+            type: 'email',
+            message: '请输入正确的邮箱',
+            trigger: 'change'
+          }
+        ],
+        password: [
+          {
+            required: true,
+            message: '请输入密码'
+          },
+          {
+            min: 6,
+            max: 20,
+            message: '密码长度在6到20个字符之间',
+            trigger: 'change'
+          }
+        ]
       },
       placeholderStyle: 'color: #ccc; font-size: 32rpx;'
     }
@@ -65,7 +69,6 @@ export default {
       this.$refs.form
         .validate()
         .then(async (res) => {
-          debugger
           await this.login(res)
           uni.hideLoading()
         })
@@ -89,6 +92,12 @@ export default {
       })
 
       if (res && res.code === 200) {
+        this.formData = {
+          username: '',
+          password: ''
+        }
+        this.$refs.form.resetFields()
+
         uni.setStorageSync('token', res.data.access_token)
         uni.setStorageSync('user_id', res.data.user_id)
         uni.reLaunch({ url: '/pages/video/list' })
@@ -101,7 +110,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .login {
   padding: 250rpx 54rpx 54rpx;
 
@@ -117,27 +126,18 @@ export default {
     line-height: 64rpx;
     margin-bottom: 48rpx;
   }
-  .uni-forms-item {
-    margin-bottom: 30rpx;
 
-    .uni-input-custom {
-      input {
-        width: 100%;
-        height: 88rpx;
-        display: flex;
-        color: #9e9e9e;
-        font-size: 32rpx;
-        padding: 20rpx 4rpx;
-        box-sizing: border-box;
-        align-items: center;
-        border-radius: 16rpx;
-        background-color: #f5f7fa;
-        color: #9e9e9e;
-        font-size: 32rpx;
-        background-color: #f5f7fa;
-      }
-    }
+  .u-input {
+    width: 100%;
+    height: 88rpx;
+    color: #9e9e9e;
+    font-size: 32rpx;
+    padding: 0rpx 24rpx !important;
+    box-sizing: border-box;
+    border-radius: 16rpx;
+    background-color: #f5f7fa;
   }
+
   .subButton {
     width: 100%;
     height: 88rpx;
@@ -149,6 +149,7 @@ export default {
     border-radius: 16rpx;
     background-color: #fdb03c;
     margin-bottom: 16rpx;
+    margin-top: 28rpx;
 
     &:after {
       border: 1px solid transparent;
@@ -165,6 +166,7 @@ export default {
     color: #fdb03c;
     font-size: 24rpx;
   }
+
   .register {
     width: 100%;
     margin-top: 376rpx;
