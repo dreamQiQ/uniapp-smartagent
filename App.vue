@@ -1,7 +1,7 @@
 <script>
 export default {
   onLaunch: function () {
-    console.log('App Launch')
+    // console.log('App Launch')
     const token = uni.getStorageSync('token')
     if (!token) {
       uni.reLaunch({
@@ -15,10 +15,10 @@ export default {
     }
   },
   onShow: function () {
-    console.log('App Show')
+    // console.log('App Show')
   },
   onHide: function () {
-    console.log('App Hide')
+    // console.log('App Hide')
   }
 }
 </script>
@@ -26,6 +26,7 @@ export default {
 <style lang="scss">
 /*每个页面公共css */
 @import 'uview-ui/index.scss';
+@import 'static/style/video.scss';
 
 uni-page-body,
 html,
@@ -34,6 +35,10 @@ body {
 }
 uni-page-body {
   overflow-y: auto;
+}
+
+view {
+  box-sizing: border-box;
 }
 
 .mb-16 {

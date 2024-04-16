@@ -1,18 +1,18 @@
 import App from './App'
 
-import uView from "uview-ui";
-Vue.use(uView);
+import uView from 'uview-ui'
+Vue.use(uView)
 
-import dayjs from 'dayjs';
-Vue.filter('timeFormat', function(timestamp, format) {
-	if (!timestamp) return ''
-	let date = new dayjs(timestamp.toString())
+import dayjs from 'dayjs'
+Vue.filter('timeFormat', function (timestamp, format) {
+  if (!timestamp) return ''
+  let date = new dayjs(timestamp.toString())
 
-	if (date.get('year') == new Date().getFullYear()) {
-		return date.format('MM-DD HH:mm:ss')
-	} else {
-		return date.format('YYYY-MM-DD HH:mm:ss')
-	}
+  if (date.get('year') == new Date().getFullYear()) {
+    return date.format('YYYY-MM-DD')
+  } else {
+    return date.format('YYYY-MM-DD HH:mm:ss')
+  }
 })
 
 // #ifndef VUE3
@@ -21,19 +21,17 @@ import './uni.promisify.adaptor'
 Vue.config.productionTip = false
 App.mpType = 'app'
 const app = new Vue({
-	...App
+  ...App
 })
 app.$mount()
 // #endif
 
 // #ifdef VUE3
-import {
-	createSSRApp
-} from 'vue'
+import { createSSRApp } from 'vue'
 export function createApp() {
-	const app = createSSRApp(App)
-	return {
-		app
-	}
+  const app = createSSRApp(App)
+  return {
+    app
+  }
 }
 // #endif

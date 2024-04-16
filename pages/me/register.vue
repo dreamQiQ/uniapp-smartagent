@@ -2,8 +2,8 @@
   <view class="register">
     <view class="title">请填写基本信息</view>
     <u-form ref="form" :model="formData" labelPosition="top" labelWidth="auto" :labelStyle="labelStyle">
-      <u-form-item label="邮箱" prop="username">
-        <u-input v-model="formData.username" focus color="#9e9e9e" fontSize="32rpx" type="text" :placeholderStyle="placeholderStyle" placeholder="请输入邮箱" />
+      <u-form-item label="邮箱" prop="userName">
+        <u-input v-model="formData.userName" focus color="#9e9e9e" fontSize="32rpx" type="text" :placeholderStyle="placeholderStyle" placeholder="请输入邮箱" />
       </u-form-item>
       <u-form-item label="密码" prop="password">
         <u-input color="#9e9e9e" fontSize="32rpx" v-model="formData.password" type="password" :placeholderStyle="placeholderStyle" placeholder="请输入密码" />
@@ -50,7 +50,7 @@ export default {
     const that = this
     return {
       formData: {
-        username: '',
+        userName: '',
         password: '',
         confirm: '',
         nickName: '',
@@ -59,7 +59,7 @@ export default {
         industry: ''
       },
       rules: {
-        username: [
+        userName: [
           { required: true, message: '请输入邮箱' },
           { type: 'email', message: '请输入正确的邮箱', trigger: 'change' }
         ],
@@ -137,7 +137,7 @@ export default {
       const res = await register(formData)
       if (res.code === 200) {
         this.formData = {
-          username: '',
+          userName: '',
           password: '',
           confirm: '',
           nickName: '',

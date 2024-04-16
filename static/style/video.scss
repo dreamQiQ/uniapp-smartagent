@@ -1,0 +1,43 @@
+.player {
+  .uni-video-bar {
+    display: flex !important;
+    width: 100%;
+    height: 60rpx;
+    padding: 0rpx;
+    position: absolute;
+    bottom: 80rpx;
+    left: 0rpx;
+    background-color: transparent;
+  }
+  // 全屏按钮
+  .uni-video-fullscreen {
+    display: none;
+  }
+  .uni-video-controls {
+    margin: 0rpx;
+  }
+  // 播放按钮
+  .uni-video-control-button {
+    display: none;
+  }
+  // 开始时间
+  .uni-video-current-time {
+    display: none;
+  }
+  // 结束时间
+  .uni-video-duration {
+    display: none;
+  }
+  // 进度条
+  .uni-video-progress {
+    height: 6rpx;
+    margin: 0rpx;
+    background-color: rgba(204, 204, 204, 0.5);
+  }
+  // 进度条进度
+  .uni-video-ball {
+    width: 16rpx;
+    height: 16rpx;
+    top: -32rpx;
+  }
+}
