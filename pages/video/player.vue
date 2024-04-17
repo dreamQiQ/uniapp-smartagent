@@ -38,24 +38,27 @@
     <view class="video-tools">
       <view class="video-icon">
         <img class="left-icon" src="@/static/svg/play-list-2-fill.svg" />
-        <view class="num">998</view>
+        <view class="num">{{ videoDetail.view_count || 0 }}</view>
       </view>
       <view class="video-icon">
         <u-icon name="heart-fill" size="60rpx" color="#D8D8D8"></u-icon>
-        <view class="num">98</view>
+        <view class="num">{{ videoDetail.collect_count || 0 }}</view>
       </view>
       <view class="video-icon">
         <img class="left-icon" src="@/static/svg/share-forward-fill.svg" />
-        <view class="num">68</view>
+        <view class="num">{{ videoDetail.forward_count || 0 }}</view>
       </view>
     </view>
   </view>
 </template>
 
 <script>
+import { detail, update } from '@/api/video.js'
+
 export default {
   data() {
     return {
+      id: '',
       videoId: String(new Date().getTime()),
       videoSrc: '',
       searchVal: '',
@@ -80,8 +83,10 @@ export default {
       })
     },
     // 播放视频
-    videoPlay() {
+    async videoPlay() {
       this.$refs.videoRef.play()
+      // 记录播放量
+      await this.videoUpdate('play')
     },
     // 暂停视频
     videoPause() {
@@ -96,7 +101,8 @@ export default {
       this.showPlayBtn = true
     },
     // 播放失败
-    videoErrorCallback() {
+    videoErrorCallback(error) {
+      console.log('🚀 ~ videoErrorCallback ~ error:', error)
       uni.showToast({
         icon: 'error',
         title: '视频加载失败'
@@ -109,6 +115,19 @@ export default {
       this.currentTime = currentTime
       const width = (currentTime / duration) * 100 + '%'
       buffered[0].style.width = width
+    },
+    // 数据记录
+    async videoUpdate(type) {
+      const typeMap = {
+        play: 'view_count', // 播放量
+        collect: 'collect_count', // 收藏量
+        forward: 'forward_count' // 分享量
+      }
+
+      const { Id, view_count } = this.videoDetail
+      const count = this.videoDetail[typeMap[type]] || 0
+      await update(Id, { [typeMap[type]]: Number(count) + 1 })
+      this.videoDetail[typeMap[type]] = Number(count) + 1
     }
   }
 }

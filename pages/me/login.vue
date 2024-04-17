@@ -112,7 +112,7 @@ export default {
 
 <style lang="scss" scoped>
 .login {
-  padding: 250rpx 54rpx 54rpx;
+  padding: 200rpx 54rpx 54rpx;
 
   .logo {
     width: 130rpx;
@@ -169,7 +169,7 @@ export default {
 
   .register {
     width: 100%;
-    margin-top: 376rpx;
+    margin-top: 326rpx;
     color: #fdb03c;
     font-size: 28rpx;
     text-align: center;
