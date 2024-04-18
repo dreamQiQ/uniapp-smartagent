@@ -72,6 +72,7 @@ export default {
   },
   onLoad({ id }) {
     this.id = id
+    this.videoInit()
   },
   async onShow() {
     uni.showLoading()
@@ -84,8 +85,6 @@ export default {
       await this.getDetail()
     }
     uni.hideLoading()
-
-    this.videoInit()
   },
   methods: {
     // 视频初始化
