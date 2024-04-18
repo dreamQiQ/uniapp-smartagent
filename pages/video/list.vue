@@ -62,7 +62,7 @@
       </u-list-item>
     </u-list>
     <view class="emity-data" v-if="!(videoList && videoList.length)">
-      <view class="emity-icon"><img src="@/static/svg/rss-fill.svg" /></view>
+      <u-image src="@/static/svg/rss-fill.svg" width="180rpx" height="180rpx" />
       <view>暂无搜索结果</view>
     </view>
   </view>
