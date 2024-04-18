@@ -1,6 +1,6 @@
 <template>
   <view class="login">
-    <img class="logo" src="@/static/svg/logo.svg" alt="logo" />
+    <u-image class="logo" src="@/static/svg/logo.svg" width="130rpx" height="130rpx" />
     <view class="title">Smart AgentZ</view>
 
     <u-form ref="form" :model="formData" :rules="rules" labelPosition="top">
@@ -100,11 +100,12 @@ export default {
 
         uni.setStorageSync('token', res.data.access_token)
         uni.setStorageSync('user_id', res.data.user_id)
+        uni.setStorageSync('videoMenu', '')
         uni.reLaunch({ url: '/pages/video/home' })
       }
     },
     register() {
-      uni.reLaunch({ url: '/pages/me/register' })
+      uni.navigateTo({ url: '/pages/me/register' })
     }
   }
 }
@@ -115,8 +116,6 @@ export default {
   padding: 200rpx 54rpx 54rpx;
 
   .logo {
-    width: 130rpx;
-    height: 130rpx;
     margin-bottom: 72rpx;
   }
 
@@ -148,7 +147,7 @@ export default {
     border: 1px solid transparent;
     border-radius: 16rpx;
     background-color: #fdb03c;
-    margin-bottom: 16rpx;
+    margin-bottom: 28rpx;
     margin-top: 28rpx;
 
     &:after {

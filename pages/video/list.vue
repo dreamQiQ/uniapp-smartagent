@@ -218,6 +218,7 @@ export default {
       white-space: nowrap;
       /* #endif */
       width: fit-content !important;
+      min-width: fit-content !important;
       color: #666;
       font-size: 32rpx;
       display: flex;

@@ -3,7 +3,7 @@
     <view class="title">请填写基本信息</view>
     <u-form ref="form" :model="formData" labelPosition="top" labelWidth="auto" :labelStyle="labelStyle">
       <u-form-item label="邮箱" prop="userName">
-        <u-input v-model="formData.userName" focus color="#9e9e9e" fontSize="32rpx" type="text" :placeholderStyle="placeholderStyle" placeholder="请输入邮箱" />
+        <u-input v-model="formData.userName" color="#9e9e9e" fontSize="32rpx" type="text" :placeholderStyle="placeholderStyle" placeholder="请输入邮箱" />
       </u-form-item>
       <u-form-item label="密码" prop="password">
         <u-input color="#9e9e9e" fontSize="32rpx" v-model="formData.password" type="password" :placeholderStyle="placeholderStyle" placeholder="请输入密码" />
@@ -22,7 +22,6 @@
       <u-form-item label="执照号" prop="licenseNumber">
         <u-input
           v-model="formData.licenseNumber"
-          focus
           color="#9e9e9e"
           fontSize="32rpx"
           type="text"
@@ -33,7 +32,7 @@
         />
       </u-form-item>
       <u-form-item label="行业" prop="industry" @click="industryShow = true">
-        <u-input v-model="formData.industry" color="#9e9e9e" fontSize="32rpx" type="text" :placeholderStyle="placeholderStyle" placeholder="请选择行业">
+        <u-input v-model="formData.industry" :readonly="true" color="#9e9e9e" fontSize="32rpx" type="text" :placeholderStyle="placeholderStyle" placeholder="请选择行业">
           <u-icon slot="suffix" name="arrow-right"></u-icon>
         </u-input>
       </u-form-item>
@@ -84,7 +83,7 @@ export default {
           { required: true, message: '请输入手机号' },
           {
             validator(rule, value, callback) {
-              let reg = /^(0|86|17951)?(13[0-9]|15[012356789]|166|17[3678]|18[0-9]|14[57])[0-9]{8}$/
+              const reg = /^[0-9]{10}$/
               return reg.test(value)
             },
             message: '请输入正确的手机号',
@@ -157,7 +156,7 @@ export default {
   components: {}
 }
 </script>
-<style scoped>
+<style lang="scss" scoped>
 .register {
   padding: 30rpx 56rpx;
 
@@ -167,6 +166,7 @@ export default {
     color: #f0a105;
     font-size: 36rpx;
     font-weight: 600;
+    margin: 0 auto;
     margin-bottom: 32rpx;
   }
 

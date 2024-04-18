@@ -14,9 +14,10 @@
       @error="videoErrorCallback"
       @timeupdate="onTimeupdate"
     ></video>
+
     <!-- 播放header -->
     <view class="video-header">
-      <img class="left-icon" src="@/static/svg/arrow-left-s-fill.svg" @click="goBack" />
+      <u-image class="left-icon" src="@/static/svg/arrow-left-s-fill.svg" width="48rpx" height="48rpx" @click="goBack" />
       <u-input v-model="searchVal" placeholder="搜索你想看的视频" placeholderStyle="color: #979797;" @change="searchVideo">
         <img class="search" slot="prefix" src="@/static/svg/find-replace-fill.svg" />
       </u-input>
@@ -37,7 +38,7 @@
     <!-- 工作栏 -->
     <view class="video-tools">
       <view class="video-icon">
-        <img class="left-icon" src="@/static/svg/play-list-2-fill.svg" />
+        <u-image src="@/static/svg/play-list-2-fill.svg" width="60rpx" height="60rpx" />
         <view class="num">{{ videoDetail.view_count || 0 }}</view>
       </view>
       <view class="video-icon">
@@ -45,7 +46,7 @@
         <view class="num">{{ videoDetail.collect_count || 0 }}</view>
       </view>
       <view class="video-icon">
-        <img class="left-icon" src="@/static/svg/share-forward-fill.svg" @click="videoUpdate('forward')" />
+        <u-image src="@/static/svg/share-forward-fill.svg" width="60rpx" height="60rpx" @click="videoUpdate('forward')" />
         <view class="num">{{ videoDetail.forward_count || 0 }}</view>
       </view>
     </view>
@@ -158,7 +159,8 @@ export default {
       const count = this.videoDetail[typeMap[type]] || 0
       await update(Id, { [typeMap[type]]: Number(count) + 1 })
       this.videoDetail[typeMap[type]] = Number(count) + 1
-    }
+    },
+    searchVideo() {}
   }
 }
 </script>
@@ -187,8 +189,6 @@ export default {
     display: flex;
     align-items: center;
     .left-icon {
-      width: 48rpx;
-      height: 48rpx;
       margin-right: 24rpx;
     }
     .right-icon {
@@ -206,7 +206,7 @@ export default {
   }
 
   .video-play-btn {
-    position: absolute;
+    position: fixed;
     left: 50%;
     top: 50%;
     margin-left: -90rpx;
@@ -291,10 +291,6 @@ export default {
       height: auto;
       text-align: center;
       color: rgba(255, 255, 255, 0.6);
-      img {
-        width: 60rpx;
-        height: 60rpx;
-      }
       .num {
         color: #fff;
         font-size: 28rpx;

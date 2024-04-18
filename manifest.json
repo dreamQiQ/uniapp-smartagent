@@ -1,32 +1,32 @@
 {
-    "name": "smartagent",
-    "appid": "__UNI__20F5721",
-    "description": "",
-    "versionName": "1.0.0",
-    "versionCode": "100",
-    "transformPx": false,
+    "name" : "smartagent",
+    "appid" : "__UNI__20F5721",
+    "description" : "",
+    "versionName" : "1.0.0",
+    "versionCode" : "100",
+    "transformPx" : false,
     /* 5+App特有相关 */
-    "app-plus": {
-        "usingComponents": true,
-        "nvueStyleCompiler": "uni-app",
-        "compilerVersion": 3,
-        "splashscreen": {
-            "alwaysShowBeforeRender": true,
-            "waiting": true,
-            "autoclose": true,
-            "delay": 0
+    "app-plus" : {
+        "usingComponents" : true,
+        "nvueStyleCompiler" : "uni-app",
+        "compilerVersion" : 3,
+        "splashscreen" : {
+            "alwaysShowBeforeRender" : true,
+            "waiting" : true,
+            "autoclose" : true,
+            "delay" : 0
         },
         /* 模块配置 */
-        "modules": {
-            "VideoPlayer": {},
-            "Camera": {},
-            "Share": {}
+        "modules" : {
+            "Camera" : {},
+            "Share" : {},
+            "VideoPlayer" : {}
         },
         /* 应用发布信息 */
-        "distribute": {
+        "distribute" : {
             /* android打包配置 */
-            "android": {
-                "permissions": [
+            "android" : {
+                "permissions" : [
                     "<uses-permission android:name=\"android.permission.CHANGE_NETWORK_STATE\"/>",
                     "<uses-permission android:name=\"android.permission.MOUNT_UNMOUNT_FILESYSTEMS\"/>",
                     "<uses-permission android:name=\"android.permission.VIBRATE\"/>",
@@ -45,51 +45,51 @@
                 ]
             },
             /* ios打包配置 */
-            "ios": {
-                "dSYMs": false
+            "ios" : {
+                "dSYMs" : false
             },
             /* SDK配置 */
-            "sdkConfigs": {
-                "ad": {},
-                "share": {
-                    "weixin": {
-                        "appid": "wxec50ded41e1a1d06",
-                        "UniversalLinks": ""
+            "sdkConfigs" : {
+                "ad" : {},
+                "share" : {
+                    "weixin" : {
+                        "appid" : "wxec50ded41e1a1d06",
+                        "UniversalLinks" : ""
                     }
                 }
             }
         }
     },
     /* 快应用特有相关 */
-    "quickapp": {},
+    "quickapp" : {},
     /* 小程序特有相关 */
-    "mp-weixin": {
-        "appid": "",
-        "setting": {
-            "urlCheck": false
+    "mp-weixin" : {
+        "appid" : "",
+        "setting" : {
+            "urlCheck" : false
         },
-        "usingComponents": true
+        "usingComponents" : true
     },
-    "mp-alipay": {
-        "usingComponents": true
+    "mp-alipay" : {
+        "usingComponents" : true
     },
-    "mp-baidu": {
-        "usingComponents": true
+    "mp-baidu" : {
+        "usingComponents" : true
     },
-    "mp-toutiao": {
-        "usingComponents": true
+    "mp-toutiao" : {
+        "usingComponents" : true
     },
-    "uniStatistics": {
-        "enable": false
+    "uniStatistics" : {
+        "enable" : false
     },
-    "h5": {
-        "devServer": {
-            "disableHostCheck": true,
-            "proxy": "http://123.6.102.119:4006",
-            "headers": {
-                "Access-Control-Allow-Origin": "*"
+    "h5" : {
+        "devServer" : {
+            "disableHostCheck" : true,
+            "proxy" : "http://123.6.102.119:4006",
+            "headers" : {
+                "Access-Control-Allow-Origin" : "*"
             }
         }
     },
-    "vueVersion": "2"
+    "vueVersion" : "2"
 }
