@@ -23,7 +23,7 @@
       <img class="right-icon" src="@/static/svg/more-2-fill.svg" />
     </view>
     <!-- 播放按钮 -->
-    <view v-show="showPlayBtn" class="video-play-btn" @click.stop="videoPlay">
+    <view v-show="showPlayBtn && videoSrc" class="video-play-btn" @click.stop="videoPlay">
       <u-icon name="play-right-fill" color="rgba(220, 223, 230, 0.56)" size="180rpx"></u-icon>
     </view>
     <!-- 视频信息 -->
@@ -45,7 +45,7 @@
         <view class="num">{{ videoDetail.collect_count || 0 }}</view>
       </view>
       <view class="video-icon">
-        <img class="left-icon" src="@/static/svg/share-forward-fill.svg" />
+        <img class="left-icon" src="@/static/svg/share-forward-fill.svg" @click="videoUpdate('forward')" />
         <view class="num">{{ videoDetail.forward_count || 0 }}</view>
       </view>
     </view>
@@ -66,16 +66,36 @@ export default {
       videoDetail: {},
       currentTime: 0,
       lineStyle: { width: '0%' },
-      descUnfold: false
+      descUnfold: false,
+      videoLoad: false
     }
   },
-  onShow() {
+  onLoad({ id }) {
+    this.id = id
+  },
+  async onShow() {
+    uni.showLoading()
     // 获取视频地址
     const video = uni.getStorageSync('video')
-    this.videoSrc = video.video_file[0].url
-    this.videoDetail = video
+    if (video) {
+      this.videoDetail = video
+      this.videoSrc = video.video_file[0].url
+    } else if (this.id) {
+      await this.getDetail()
+    }
+    uni.hideLoading()
   },
   methods: {
+    // 获取详情
+    async getDetail() {
+      this.videoLoad = true
+      const params = { where: `(Id,eq,${this.id})` }
+      const video = await detail(params)
+      this.videoDetail = video
+      const videoFile = JSON.parse(video.video_file)
+      this.videoSrc = videoFile[0].url
+      this.videoLoad = false
+    },
     // 返回
     goBack() {
       uni.switchTab({
@@ -102,11 +122,12 @@ export default {
     },
     // 播放失败
     videoErrorCallback(error) {
-      console.log('🚀 ~ videoErrorCallback ~ error:', error)
-      uni.showToast({
-        icon: 'error',
-        title: '视频加载失败'
-      })
+      if (!this.videoLoad) {
+        uni.showToast({
+          icon: 'error',
+          title: '视频加载失败'
+        })
+      }
     },
     // 播放进度
     onTimeupdate(video) {

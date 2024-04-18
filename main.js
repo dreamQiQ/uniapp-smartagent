@@ -1,9 +1,8 @@
 import App from './App'
-
 import uView from 'uview-ui'
-Vue.use(uView)
-
 import dayjs from 'dayjs'
+
+Vue.use(uView)
 Vue.filter('timeFormat', function (timestamp, format) {
   if (!timestamp) return ''
   let date = new dayjs(timestamp.toString())

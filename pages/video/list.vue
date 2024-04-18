@@ -1,12 +1,43 @@
 <template>
   <view class="video-list">
-    <view class="nav-list-wrap">
-      <view class="wrap-item" :class="{ active: activeNav === nav }" v-for="nav in videoNav" :key="nav" @click="activeColNav(nav)">{{ nav }}</view>
-    </view>
+    <scroll-view id="nav-bar" :scroll="false" :scroll-x="true" :show-scrollbar="false" @touchmove.stop>
+      <view class="nav-bar-list">
+        <view class="nav-ul">
+          <view
+            :class="{ 'bar-item': true, active: activeNav == nav }"
+            v-for="(nav, index) in videoNav"
+            :key="nav"
+            :id="nav"
+            :ref="'tabitem' + index"
+            :data-id="index"
+            :data-current="index"
+            @click="activeColNav(nav)"
+          >
+            {{ nav }}
+          </view>
+        </view>
+      </view>
+    </scroll-view>
 
-    <view class="nav-list">
-      <view class="nav-item" :class="{ activeItem: activeItem === item }" v-for="item in navList[activeNav]" :key="item" @click="activeNavItem(item)">{{ item }}</view>
-    </view>
+    <scroll-view style="margin: 14rpx 0" id="nav-list" :scroll="false" :scroll-x="true" :show-scrollbar="false" @touchmove.stop>
+      <view class="nav-bar-list">
+        <view class="nav-ul" style="gap: 22rpx; height: auto">
+          <view
+            :class="{ 'nav-item': true, activeItem: activeItem == item }"
+            v-for="(item, index) in navList[activeNav]"
+            :key="item"
+            :id="item"
+            :ref="'tabitem' + index"
+            :data-id="index"
+            :data-current="index"
+            @click="activeNavItem(item)"
+          >
+            {{ item }}
+          </view>
+        </view>
+      </view>
+    </scroll-view>
+
     <view class="type-list">
       <view :class="{ 'type-item': true, activeType: activeType === '热门视频' }" @click="activeVideoType('热门视频')">热门视频</view>
       <view :class="{ 'type-item': true, activeType: activeType === '最近更新' }" @click="activeVideoType('最近更新')">最近更新</view>
@@ -136,9 +167,7 @@ export default {
       }
     },
     storageVideoList(list) {
-      console.log('🚀 ~ storageVideoList ~ list:', list)
       const videoUrlList = list.map((i) => i.video_file[0].url).filter((i) => i)
-      console.log('🚀 ~ storageVideoList ~ videoUrlList:', videoUrlList)
     },
     // 获取视频封面
     getVideoImg(item) {
@@ -157,7 +186,7 @@ export default {
     // 播放
     onPlayer(item) {
       uni.setStorageSync('video', item)
-      uni.navigateTo({ url: `/pages/video/player` })
+      uni.navigateTo({ url: `/pages/video/player?id=${item.Id}` })
     }
   },
   components: {}
@@ -170,24 +199,31 @@ export default {
   padding: 32rpx 28rpx;
   box-sizing: border-box;
   background-color: #f1f3f8;
-  .nav-list-wrap {
-    width: 100%;
-    height: 80rpx;
-    display: flex;
-    gap: 46rpx;
-    overflow: auto;
-    scrollbar-width: none; /* firefox */
-    -ms-overflow-style: none; /* IE 10+ */
-    &::-webkit-scrollbar {
-      display: none; /* Chrome Safari */
+
+  .nav-bar-list {
+    flex-direction: column;
+    .nav-ul {
+      height: 80rpx;
+      display: flex;
+      gap: 46rpx;
+      align-items: flex-end;
+      flex-direction: row;
     }
-    .wrap-item {
-      height: 84%;
+    .bar-item {
+      /* #ifndef APP-PLUS */
+      display: inline-block;
+      /* #endif */
+      flex-wrap: nowrap;
+      /* #ifndef APP-PLUS */
+      white-space: nowrap;
+      /* #endif */
+      width: fit-content !important;
       color: #666;
       font-size: 32rpx;
-      white-space: nowrap;
       display: flex;
       align-items: flex-end;
+      position: relative;
+      top: -14rpx;
       &.active {
         color: #3d3d3d;
         font-size: 48rpx;
@@ -202,24 +238,8 @@ export default {
           left: 50%;
           bottom: -12rpx;
           margin-left: -22rpx;
-          // margin-right: -44rpx;
         }
       }
-    }
-  }
-
-  .nav-list {
-    width: 100%;
-    height: auto;
-    margin: 30rpx 0 14rpx;
-    display: flex;
-    align-items: center;
-    gap: 22rpx;
-    overflow: auto;
-    scrollbar-width: none; /* firefox */
-    -ms-overflow-style: none; /* IE 10+ */
-    &::-webkit-scrollbar {
-      display: none; /* Chrome Safari */
     }
     .nav-item {
       width: 122rpx;
