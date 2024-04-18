@@ -84,8 +84,17 @@ export default {
       await this.getDetail()
     }
     uni.hideLoading()
+
+    this.videoInit()
   },
   methods: {
+    // 视频初始化
+    videoInit() {
+      this.$nextTick(() => {
+        const buffered = document.getElementsByClassName('uni-video-progress-buffered')
+        buffered[0].style['background-color'] = 'rgba(255, 255, 255, 0.4)'
+      })
+    },
     // 获取详情
     async getDetail() {
       this.videoLoad = true
@@ -136,6 +145,7 @@ export default {
       this.currentTime = currentTime
       const width = (currentTime / duration) * 100 + '%'
       buffered[0].style.width = width
+      buffered[0].style['background-color'] = '#fff'
     },
     // 数据记录
     async videoUpdate(type) {
@@ -281,6 +291,7 @@ export default {
       width: 60rpx;
       height: auto;
       text-align: center;
+      color: rgba(255, 255, 255, 0.6);
       img {
         width: 60rpx;
         height: 60rpx;
