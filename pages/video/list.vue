@@ -11,7 +11,7 @@
             :ref="'tabitem' + index"
             :data-id="index"
             :data-current="index"
-            @click="activeColNav(nav)"
+            @tap="activeColNav(nav)"
           >
             {{ nav }}
           </view>
@@ -30,7 +30,7 @@
             :ref="'tabitem' + index"
             :data-id="index"
             :data-current="index"
-            @click="activeNavItem(item)"
+            @tap="activeNavItem(item)"
           >
             {{ item }}
           </view>
@@ -39,13 +39,13 @@
     </scroll-view>
 
     <view class="type-list">
-      <view :class="{ 'type-item': true, activeType: activeType === '热门视频' }" @click="activeVideoType('热门视频')">热门视频</view>
-      <view :class="{ 'type-item': true, activeType: activeType === '最近更新' }" @click="activeVideoType('最近更新')">最近更新</view>
+      <view :class="{ 'type-item': true, activeType: activeType === '热门视频' }" @tap="activeVideoType('热门视频')">热门视频</view>
+      <view :class="{ 'type-item': true, activeType: activeType === '最近更新' }" @tap="activeVideoType('最近更新')">最近更新</view>
     </view>
     <!-- 视频列表 -->
     <u-list height="calc(100% - 216rpx)" @scrolltolower="scrolltolower" v-if="videoList && videoList.length">
       <u-list-item v-for="(item, index) in videoList" :key="item.Id" style="margin-bottom: 36rpx">
-        <view class="list-item" @click="onPlayer(item)">
+        <view class="list-item" @tap="onPlayer(item)">
           <view class="item-left">
             <view class="item-img">
               <u-image :src="getVideoImg(item)" width="200rpx" height="128rpx" radius="14rpx" />

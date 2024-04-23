@@ -1,8 +1,10 @@
 import App from './App'
+import store from './store'
 import uView from 'uview-ui'
 import dayjs from 'dayjs'
 
 Vue.use(uView)
+Vue.prototype.$store = store
 Vue.filter('timeFormat', function (timestamp, format) {
   if (!timestamp) return ''
   let date = new dayjs(timestamp.toString())
@@ -20,6 +22,7 @@ import './uni.promisify.adaptor'
 Vue.config.productionTip = false
 App.mpType = 'app'
 const app = new Vue({
+  store,
   ...App
 })
 app.$mount()

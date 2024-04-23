@@ -1,8 +1,9 @@
 <script>
+import store from '@/store/index.js'
 export default {
   onLaunch: function () {
-    // console.log('App Launch')
     const token = uni.getStorageSync('token')
+
     if (!token) {
       uni.reLaunch({
         url: '/pages/me/login',
@@ -12,6 +13,10 @@ export default {
           //#endif
         }
       })
+    } else {
+      console.log(111)
+
+      store.dispatch('getUserInfo')
     }
   },
   onShow: function () {

@@ -3,7 +3,7 @@
     <u--input class="mb-16" placeholder="视频名称" border="surround" v-model="name"></u--input>
     <u--input class="mb-16" placeholder="视频描述" border="surround" v-model="description"></u--input>
     <u-upload class="mb-16" :fileList="fileList" @afterRead="afterRead" @delete="deletePic" maxCount="1" accept="video"></u-upload>
-    <u-button type="primary" text="创建视频" @click="createVideo"></u-button>
+    <u-button type="primary" text="创建视频" @tap="createVideo"></u-button>
   </view>
 </template>
 

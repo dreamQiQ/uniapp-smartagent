@@ -31,14 +31,14 @@
           placeholder="请输入执照号"
         />
       </u-form-item>
-      <u-form-item label="行业" prop="industry" @click="industryShow = true">
+      <u-form-item label="行业" prop="industry" @tap="industryShow = true">
         <u-input v-model="formData.industry" :readonly="true" color="#9e9e9e" fontSize="32rpx" type="text" :placeholderStyle="placeholderStyle" placeholder="请选择行业">
           <u-icon slot="suffix" name="arrow-right"></u-icon>
         </u-input>
       </u-form-item>
       <u-picker :show="industryShow" :columns="industryColumns" :closeOnClickOverlay="true" @close="industryShow = false" @cancel="industryShow = false" @confirm="confirm"></u-picker>
     </u-form>
-    <button class="subButton" :class="{ disabledBtn: disabledBtn }" @click="submit">登录</button>
+    <button class="subButton" :class="{ disabledBtn: disabledBtn }" @tap="submit">登录</button>
   </view>
 </template>
 <script>

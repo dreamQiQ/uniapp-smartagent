@@ -12,14 +12,15 @@
       </u-form-item>
     </u-form>
 
-    <button class="subButton" :class="{ disabledBtn: disabledBtn }" @click="submit">登录</button>
+    <button class="subButton" :class="{ disabledBtn: disabledBtn }" @tap="submit">登录</button>
     <p class="reset-password">忘记密码</p>
-    <p class="register" @click="register">注册新账户</p>
+    <p class="register" @tap="register">注册新账户</p>
   </view>
 </template>
 
 <script>
 import { login, getUserInfo } from '@/api/system.js'
+import store from '@/store/index.js'
 
 export default {
   data() {
@@ -83,25 +84,32 @@ export default {
         })
     },
     async login() {
-      let deviceInfo = uni.getDeviceInfo()
+      try {
+        let deviceInfo = uni.getDeviceInfo()
 
-      const res = await login({
-        username: this.formData.username,
-        password: this.formData.password,
-        deviceInfo
-      })
+        const res = await login({
+          username: this.formData.username,
+          password: this.formData.password,
+          deviceInfo
+        })
 
-      if (res && res.code === 200) {
-        this.formData = {
-          username: '',
-          password: ''
+        if (res && res.code === 200) {
+          this.formData = {
+            username: '',
+            password: ''
+          }
+          this.$refs.form.resetFields()
+
+          uni.setStorageSync('token', res.data.access_token)
+          uni.setStorageSync('user_id', res.data.user_id)
+          uni.setStorageSync('videoMenu', '')
+          console.log(2222)
+
+          store.dispatch('getUserInfo')
+          uni.reLaunch({ url: '/pages/video/home' })
         }
-        this.$refs.form.resetFields()
-
-        uni.setStorageSync('token', res.data.access_token)
-        uni.setStorageSync('user_id', res.data.user_id)
-        uni.setStorageSync('videoMenu', '')
-        uni.reLaunch({ url: '/pages/video/home' })
+      } catch (error) {
+        console.error(error)
       }
     },
     register() {

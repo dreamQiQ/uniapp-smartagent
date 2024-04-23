@@ -8,7 +8,7 @@
       :loop="true"
       :controls="true"
       :show-center-play-btn="false"
-      @click.stop="videoPause"
+      @tap.stop="videoPause"
       @play="onPlay"
       @pause="onPause"
       @error="videoErrorCallback"
@@ -17,14 +17,14 @@
 
     <!-- 播放header -->
     <view class="video-header">
-      <u-image class="left-icon" src="@/static/svg/arrow-left-s-fill.svg" width="48rpx" height="48rpx" @click="goBack" />
+      <u-image class="left-icon" src="@/static/svg/arrow-left-s-fill.svg" width="48rpx" height="48rpx" @tap="goBack" />
       <u-input v-model="searchVal" placeholder="搜索你想看的视频" placeholderStyle="color: #979797;" @change="searchVideo">
         <img class="search" slot="prefix" src="@/static/svg/find-replace-fill.svg" />
       </u-input>
       <img class="right-icon" src="@/static/svg/more-2-fill.svg" />
     </view>
     <!-- 播放按钮 -->
-    <view v-show="showPlayBtn && videoSrc" class="video-play-btn" @click.stop="videoPlay">
+    <view v-show="showPlayBtn && videoSrc" class="video-play-btn" @tap.stop="videoPlay">
       <u-icon name="play-right-fill" color="rgba(220, 223, 230, 0.56)" size="180rpx"></u-icon>
     </view>
     <!-- 视频信息 -->
@@ -32,7 +32,7 @@
       <view class="video-title">{{ videoDetail.Title }}</view>
       <view class="video-desc" v-show="videoDetail.desc">
         <view class="desc" :class="{ unfold: descUnfold }">{{ videoDetail.desc }}</view>
-        <view class="descBtn" @click="descUnfold = !descUnfold">{{ descUnfold ? '收起' : '展开' }}</view>
+        <view class="descBtn" @tap="descUnfold = !descUnfold">{{ descUnfold ? '收起' : '展开' }}</view>
       </view>
     </view>
     <!-- 工作栏 -->
@@ -46,7 +46,7 @@
         <view class="num">{{ videoDetail.collect_count || 0 }}</view>
       </view>
       <view class="video-icon">
-        <u-image src="@/static/svg/share-forward-fill.svg" width="60rpx" height="60rpx" @click="videoUpdate('forward')" />
+        <u-image src="@/static/svg/share-forward-fill.svg" width="60rpx" height="60rpx" @tap="videoUpdate('forward')" />
         <view class="num">{{ videoDetail.forward_count || 0 }}</view>
       </view>
     </view>
