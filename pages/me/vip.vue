@@ -96,8 +96,8 @@ export default {
   onLoad() {
     this.getVipList()
   },
-  async onShow() {
-    await this.$store.dispatch('getUserInfo')
+  onShow() {
+    this.$store.dispatch('getUserInfo')
     if (this.userInfo.isVip) uni.switchTab({ url: '/pages/me/me' })
   },
   methods: {
