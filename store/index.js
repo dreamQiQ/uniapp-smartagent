@@ -17,7 +17,6 @@ const store = new Vuex.Store({
   actions: {
     async getUserInfo({ commit }) {
       const { result } = await getUserInfo()
-      console.log('🚀 ~ getUserInfo ~ result:', result)
       commit('setUserInfo', result)
     }
   }

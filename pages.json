@@ -53,6 +53,20 @@
 			}
 		},
 		{
+			"path": "pages/me/order",
+			"style": {
+				"navigationBarTitleText": "我的订单",
+				"enablePullDownRefresh": true
+			}
+		},
+		{
+			"path": "pages/me/userData",
+			"style": {
+				"navigationBarTitleText": "个人信息",
+				"enablePullDownRefresh": true
+			}
+		},
+		{
 			"path": "pages/video/player",
 			"style": {
 				"navigationBarTitleText": "",
@@ -119,7 +133,7 @@
 		]
 	},
 	"uniIdRouter": {},
-	"condition" : { //模式配置，仅开发期间生效
+	"condition": { //模式配置，仅开发期间生效
 		"current": 0, //当前激活的模式(list 的索引项)
 		"list": [
 			{

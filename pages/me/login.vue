@@ -103,7 +103,6 @@ export default {
           uni.setStorageSync('token', res.data.access_token)
           uni.setStorageSync('user_id', res.data.user_id)
           uni.setStorageSync('videoMenu', '')
-          console.log(2222)
 
           store.dispatch('getUserInfo')
           uni.reLaunch({ url: '/pages/video/home' })

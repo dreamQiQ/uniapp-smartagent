@@ -11,7 +11,7 @@
           <view class="user-id"> ID: {{ userInfo.userId }} </view>
         </view>
       </view>
-      <view class="user-button"> 编辑个人资料 </view>
+      <view class="user-button" @tap="toUserData"> 编辑个人资料 </view>
     </view>
     <view class="user-vip-card">
       <view class="vip-card-content">
@@ -41,6 +41,16 @@
       </view>
       <u-notice-bar text="请尽快更新个人名片，避免潜在客户无法联系您~" speed="60" fontSize="20rpx"></u-notice-bar>
     </view>
+    <view class="card" style="padding: 14rpx 22rpx">
+      <view class="card-title">推荐服务</view>
+      <u-grid col="4">
+        <u-grid-item v-for="item in serveList" :key="item.name" :name="item.name" @tap="handleServe(item)">
+          <u-image :src="`../../static/images/${item.img}.png`" width="60rpx" height="60rpx" />
+          <text class="grid-text">{{ item.name }}</text>
+        </u-grid-item>
+      </u-grid>
+    </view>
+
     <view class="logout" @tap="logout"> 退出登录 </view>
   </view>
 </template>
@@ -51,7 +61,30 @@ import defaultAvatar from '@/static/images/defaultAvatar.png'
 
 export default {
   data() {
-    return {}
+    return {
+      serveList: [
+        {
+          name: '观看历史',
+          img: 'history'
+        },
+        {
+          name: '我的收藏',
+          img: 'collect'
+        },
+        {
+          name: '数据中心',
+          img: 'statistics'
+        },
+        {
+          name: '联系客服',
+          img: 'service'
+        },
+        {
+          name: '我的订单',
+          img: 'order'
+        }
+      ]
+    }
   },
   components: {},
   computed: {
@@ -69,6 +102,7 @@ export default {
   },
   onShow() {},
   methods: {
+    // 跳转vip
     toVipPage() {
       if (this.userInfo.isVip) {
         // uni.navigateTo({ url: '/pages/me/vip' })
@@ -76,6 +110,19 @@ export default {
         uni.navigateTo({ url: '/pages/me/vip' })
       }
     },
+    // 跳转服务
+    handleServe(item) {
+      switch (item.img) {
+        case 'order':
+          uni.navigateTo({ url: `/pages/me/${item.img}` })
+          break
+      }
+    },
+    // 个人资料
+    toUserData() {
+      uni.navigateTo({ url: `/pages/me/userData` })
+    },
+    // 退出登录
     logout() {
       uni.setStorageSync('token', '')
       uni.setStorageSync('user_id', '')
@@ -232,6 +279,25 @@ export default {
     .u-notice-bar {
       padding: 10rpx 20rpx;
       border-radius: 14rpx;
+    }
+  }
+  .card-title {
+    color: #3d3d3d;
+    font-size: 28rpx;
+    font-weight: bold;
+    line-height: 52rpx;
+    margin-bottom: 16rpx;
+  }
+  .u-grid {
+    .u-grid-item {
+      margin-bottom: 26rpx;
+    }
+    .grid-text {
+      color: #3d3d3d;
+      font-size: 18rpx;
+      font-weight: bold;
+      line-height: 40rpx;
+      margin-top: 12rpx;
     }
   }
 }

@@ -67,7 +67,6 @@ class Request {
 		if (port) {
 			this.baseUrl += ':' + port
 		}
-		console.log(this.baseUrl)
 
 		if (data.url) {
 			this.baseUrl = protocl + data.url

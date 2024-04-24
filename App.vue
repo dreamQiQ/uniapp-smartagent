@@ -1,6 +1,10 @@
 <script>
 import store from '@/store/index.js'
+
 export default {
+  data() {
+    return {}
+  },
   onLaunch: function () {
     const token = uni.getStorageSync('token')
 
@@ -14,20 +18,13 @@ export default {
         }
       })
     } else {
-      console.log(111)
-
       store.dispatch('getUserInfo')
     }
   },
-  onShow: function () {
-    // console.log('App Show')
-  },
-  onHide: function () {
-    // console.log('App Hide')
-  }
+  methods: {},
+  components: {}
 }
 </script>
-
 <style lang="scss">
 /*每个页面公共css */
 @import 'uview-ui/index.scss';
