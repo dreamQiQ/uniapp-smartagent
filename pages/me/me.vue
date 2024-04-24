@@ -101,6 +101,11 @@ export default {
     }
   },
   onShow() {},
+  // 下拉刷新
+  onPullDownRefresh() {
+    this.$store.dispatch('getUserInfo')
+    uni.stopPullDownRefresh()
+  },
   methods: {
     // 跳转vip
     toVipPage() {

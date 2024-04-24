@@ -42,7 +42,10 @@ export default {
     this.getListData()
   },
   // 下拉刷新
-  onPullDownRefresh() {},
+  async onPullDownRefresh() {
+    await this.getListData()
+    uni.stopPullDownRefresh()
+  },
   methods: {
     dateFormat(date) {
       return dayjs(date).format('YYYY/MM/DD HH:mm')

@@ -167,13 +167,17 @@ export default {
   onShow() {
     this.getUserData()
   },
+  // 下拉刷新
+  async onPullDownRefresh() {
+    await this.getUserData()
+    uni.stopPullDownRefresh()
+  },
   methods: {
     // 获取用户信息
     async getUserData() {
       const { result } = await getUserInfo()
       this.userInfo = result
       this.formData = JSON.parse(JSON.stringify(result))
-      console.log('🚀 ~ getUserData ~ result:', result)
     },
     // 上传头像
     async uploadAvatar(event) {
@@ -185,7 +189,6 @@ export default {
         success: async (imageRes) => {
           try {
             const fileUrl = imageRes.tempFilePaths[0]
-            console.log('🚀 ~ success ~ fileUrl:', fileUrl)
             const { data } = await that.uploadFilePromise(fileUrl)
             const res = JSON.parse(data)
             // 上传成功后修改用户信息
@@ -259,7 +262,6 @@ export default {
     // 行业编辑
     confirm(data) {
       this.formData.industry = data.value[0]
-      this.field = ''
       this.industryShow = false
     },
     // 编辑用户信息
