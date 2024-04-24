@@ -91,7 +91,7 @@
             <u-icon slot="suffix" name="arrow-right"></u-icon>
           </u-input>
         </u-form-item>
-        <u-form-item v-else-if="field === 'mobile'" :prop="field">
+        <u-form-item v-else-if="['mobile', 'companyPhone'].includes(field)" :prop="field">
           <u-input v-model="formData[field]" :placeholder="placeholder" fontSize="32rpx" type="text" :placeholderStyle="placeholderStyle" style="background-color: #f5f7fa">
             <u--text text="+1" slot="prefix" margin="0 3px 0 0" type="tips"></u--text>
           </u-input>
@@ -159,9 +159,9 @@ export default {
             trigger: 'change'
           }
         ],
-        licenseNumber: [{ required: true, message: '请输入执照号', trigger: 'change' }],
-        loading: false
-      }
+        licenseNumber: [{ required: true, message: '请输入执照号', trigger: 'change' }]
+      },
+      loading: false
     }
   },
   onShow() {
@@ -177,6 +177,7 @@ export default {
     },
     // 上传头像
     async uploadAvatar(event) {
+      const that = this
       if (this.loading) return
       this.loading = true
       uni.chooseImage({
@@ -185,16 +186,16 @@ export default {
           try {
             const fileUrl = imageRes.tempFilePaths[0]
             console.log('🚀 ~ success ~ fileUrl:', fileUrl)
-            const { data } = await this.uploadFilePromise(fileUrl)
+            const { data } = await that.uploadFilePromise(fileUrl)
             const res = JSON.parse(data)
             // 上传成功后修改用户信息
             const edit = await editUserInfo({ avatar: res.result })
-            await this.getUserData()
-            this.$store.dispatch('getUserInfo')
-            this.loading = false
+            await that.getUserData()
+            that.$store.dispatch('getUserInfo')
+            that.loading = false
           } catch (error) {
-            this.loading = false
-            this.$refs.uNotify.show({
+            that.loading = false
+            that.$refs.uNotify.show({
               type: 'error',
               message: '上传失败',
               fontSize: '24rpx'
