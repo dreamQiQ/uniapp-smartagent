@@ -15,6 +15,8 @@
     <button class="subButton" :class="{ disabledBtn: disabledBtn }" @tap="submit">登录</button>
     <p class="reset-password">忘记密码</p>
     <p class="register" @tap="register">注册新账户</p>
+    <!-- 提示 -->
+    <u-notify ref="uNotify"></u-notify>
   </view>
 </template>
 
@@ -74,12 +76,7 @@ export default {
           uni.hideLoading()
         })
         .catch((err) => {
-          if (err.code) {
-            uni.showToast({
-              icon: 'none',
-              title: err.msg
-            })
-          }
+          if (err.code) this.$refs.uNotify.error(err.msg)
           uni.hideLoading()
         })
     },
@@ -106,9 +103,10 @@ export default {
 
           store.dispatch('getUserInfo')
           uni.reLaunch({ url: '/pages/video/home' })
+        } else if (res && res.code === 401) {
         }
-      } catch (error) {
-        console.error(error)
+      } catch (err) {
+        this.$refs.uNotify.error(err.msg)
       }
     },
     register() {

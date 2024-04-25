@@ -78,7 +78,17 @@ export default {
           }
         ],
         nickName: [{ required: true, message: '请输入英文名' }],
-        licenseNumber: [{ required: true, message: '请输入执照号' }],
+        licenseNumber: [
+          { required: true, message: '请输入执照号' },
+          {
+            validator(rule, value, callback) {
+              const reg = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9a-zA-Z]{5,20}$/
+              return reg.test(value)
+            },
+            message: '5-20字符，字母和数字组成，不区分大小写',
+            trigger: 'change'
+          }
+        ],
         mobile: [
           { required: true, message: '请输入手机号' },
           {

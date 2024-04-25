@@ -65,6 +65,8 @@
       <u-image src="@/static/svg/rss-fill.svg" width="180rpx" height="180rpx" />
       <view>暂无搜索结果</view>
     </view>
+    <!-- 提示 -->
+    <u-notify ref="uNotify"></u-notify>
   </view>
 </template>
 <script>

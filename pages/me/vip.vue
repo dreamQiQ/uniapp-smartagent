@@ -5,8 +5,8 @@
       <view class="vip-title"> 成为smart agent VIP </view>
       <view class="card vip-card">
         <u-row justify="space-between" gutter="10">
-          <u-col span="4" v-for="item in vipList" :key="item.Id">
-            <view class="card-item" :class="{ active: vipId === item.price_id }" @tap="() => (vipId = item.price_id)">
+          <u-col span="4" v-for="(item, index) in vipList" :key="item.Id">
+            <view class="card-item" :class="{ active: vipId === index }" @tap="() => (vipId = index)">
               <u-tag v-if="item.promotion" :text="item.promotion" type="error"></u-tag>
               <view class="title"> {{ item.Title }} </view>
               <view class="money">
@@ -18,7 +18,7 @@
             </view>
           </u-col>
         </u-row>
-        <view class="hint"> 按每季135美元自动续费，可随时取消 </view>
+        <view class="hint"> {{ vipList[vipId] && vipList[vipId].hint }} </view>
       </view>
       <view class="vip-title"> 专属功能 </view>
       <view class="card vip-card" style="padding: 16rpx; padding-right: 60rpx">
@@ -58,7 +58,7 @@
           <view class="message"> 1 </view>
         </view>
       </view>
-      <view class="vip-btn" :class="{ disabled: !vipId }" @tap="openVipModel"> 7天免费使用并开通 </view>
+      <view class="vip-btn" @tap="openVipModel"> 7天免费使用并开通 </view>
       <u-checkbox-group v-model="agreement" placement="row">
         <u-checkbox label="开通前阅读《会员服务协议》及《自动续费服务规则》" :name="true" shape="circle" labelSize="26rpx" />
       </u-checkbox-group>
@@ -85,11 +85,14 @@ export default {
       agreement: [],
       vipModal: false,
       vipList: [],
-      vipId: ''
+      vipId: 0,
+      newVipHint: ['7天免费试用，到期自动续费$50/月，可随时取消', '7天免费试用，到期自动续费$135/季度，可随时取消', '7天免费试用，到期自动续费$500/年，可随时取消'],
+      oldVipHint: ['按每月50美元自动续费，可随时取消', '按每季度135美元自动续费，可随时取消', '按每年500美元自动续费，可随时取消']
     }
   },
   computed: {
     userInfo() {
+      // userInfo.isOpenThroughVip
       return this.$store.state.userInfo
     }
   },
@@ -104,8 +107,13 @@ export default {
     // 获取vip套餐
     async getVipList() {
       try {
+        const { userInfo, newVipHint, oldVipHint } = this
         const { list } = await getVipList()
-        this.vipList = list
+        const hintList = userInfo.isOpenThroughVip ? oldVipHint : newVipHint
+        this.vipList = list.map((v, i) => {
+          v.hint = hintList[i]
+          return v
+        })
       } catch (error) {
         this.$refs.uNotify.show({
           type: 'error',
@@ -131,8 +139,9 @@ export default {
     // 开通vip
     async openVip() {
       try {
-        const { vipId } = this
-        const { result } = await openVip(vipId)
+        const { vipId, vipList } = this
+        const id = vipList[vipId].price_id
+        const { result } = await openVip(id)
         plus.runtime.openURL(result, (err) => {
           console.error(err)
         })
@@ -271,9 +280,6 @@ export default {
       padding: 12rpx 0rpx;
       border-radius: 16rpx;
       background: #f3c873;
-      &.disabled {
-        background: rgba(243, 200, 115, 0.5);
-      }
     }
     .u-checkbox-group {
       width: 100%;
