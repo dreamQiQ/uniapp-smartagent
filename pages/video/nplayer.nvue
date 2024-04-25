@@ -1,0 +1,313 @@
+<template>
+  <view class="video-play">
+    <video
+      :style="`width:${windowWidth}px;height:${windowHeight}`"
+      ref="videoRef"
+      class="player"
+      :id="videoId"
+      :src="videoSrc"
+      :loop="true"
+      :controls="false"
+      :show-center-play-btn="false"
+      @tap.stop="videoPause"
+      @play="onPlay"
+      @pause="onPause"
+      @error="videoErrorCallback"
+      @timeupdate="onTimeupdate"></video>
+    <!-- <text style="color: #fff">123321</text> -->
+    <cover-view>
+      <view class="video-header" :style="`width:${windowWidth}px;`">
+        <u-icon name="arrow-left" size="48rpx" color="#D8D8D8" @tap="goBack"></u-icon>
+        <u-input class="video-header-input" v-model="searchVal" placeholder="搜索你想看的视频" placeholderStyle="color: #979797;" @change="searchVideo"></u-input>
+        <!-- <img class="right-icon" /> -->
+      </view>
+    </cover-view>
+    <!-- 播放按钮 -->
+    <cover-view>
+      <view v-if="showPlayBtn && videoSrc" class="video-play-btn" :style="`left:${windowWidth / 2 - 50}px;top:${windowHeight / 2 - 50}`" @tap.stop="videoPlay">
+        <u-icon name="play-right-fill" color="rgba(220, 223, 230, 0.56)" size="100px"></u-icon>
+      </view>
+    </cover-view>
+    <!-- 视频信息 -->
+    <cover-view>
+      <view class="video-info" :style="`width:${windowWidth * 0.85}px;`">
+        <text class="video-info-title">{{ videoDetail.Title }}</text>
+        <view class="video-info-desc" v-if="videoDetail.desc">
+          <text class="video-info-desc-desc" :class="{ unfold: descUnfold }">{{ videoDetail.desc }}</text>
+          <view class="descBtn" @tap="descUnfold = !descUnfold">{{ descUnfold ? '收起' : '展开' }}</view>
+        </view>
+      </view>
+    </cover-view>
+    <!-- 视频进度条 -->
+    <cover-view>
+      <view class="video-progress" :style="`width:${windowWidth}px;`">
+        <view class="video-progress2" :style="`width:${progressWidth}px;`"></view>
+      </view>
+    </cover-view>
+
+    <!-- 右侧操作按钮 -->
+    <cover-view>
+      <view class="video-tools">
+        <view class="video-tools_video-icon">
+          <u-image src="@/static/svg/play-list-2-fill.svg" width="60rpx" height="60rpx" />
+          <view class="video-tools_video-icon-num">{{ videoDetail.view_count || 0 }}</view>
+        </view>
+        <view class="video-tools_video-icon">
+          <u-icon name="heart-fill" size="60rpx" color="#D8D8D8"></u-icon>
+          <view class="video-tools_video-icon-num">{{ videoDetail.collect_count || 0 }}</view>
+        </view>
+        <view class="video-tools_video-icon">
+          <u-image src="@/static/svg/share-forward-fill.svg" width="60rpx" height="60rpx" @tap="videoUpdate('forward')" />
+          <view class="video-tools_video-icon-num">{{ videoDetail.forward_count || 0 }}</view>
+        </view>
+      </view>
+    </cover-view>
+  </view>
+</template>
+
+<script>
+import { detail, update } from '@/api/video.js'
+
+export default {
+  data() {
+    return {
+      id: '',
+      videoId: String(new Date().getTime()),
+      videoSrc: '',
+      searchVal: '',
+      showPlayBtn: true,
+      videoDetail: {},
+      currentTime: 0,
+      lineStyle: { width: '0%' },
+      descUnfold: false,
+      videoLoad: false,
+      windowWidth: 0,
+      windowHeight: 0,
+      progressWidth: 0,
+    }
+  },
+  onLoad({ id }) {
+    const systeminfo = uni.getSystemInfoSync()
+    console.log(systeminfo)
+    this.windowHeight = systeminfo.windowHeight - systeminfo.windowTop
+    this.windowWidth = systeminfo.windowWidth
+    this.id = id
+    this.videoInit()
+  },
+  async onShow() {
+    uni.showLoading()
+    // 获取视频地址
+    const video = uni.getStorageSync('video')
+    if (video) {
+      this.videoDetail = video
+      this.videoSrc = video.video_file[0].url
+    } else if (this.id) {
+      await this.getDetail()
+    }
+    uni.hideLoading()
+  },
+  methods: {
+    // 视频初始化
+    videoInit() {
+      this.$nextTick(() => {})
+    },
+    // 获取详情
+    async getDetail() {
+      this.videoLoad = true
+      const params = { where: `(Id,eq,${this.id})` }
+      const video = await detail(params)
+      this.videoDetail = video
+      const videoFile = JSON.parse(video.video_file)
+      this.videoSrc = videoFile[0].url
+      this.videoLoad = false
+    },
+    // 返回
+    goBack() {
+      uni.switchTab({
+        url: '/pages/video/list',
+      })
+    },
+    // 播放视频
+    async videoPlay() {
+      console.log('videoPlay')
+      this.$refs.videoRef.play()
+      // 记录播放量
+      await this.videoUpdate('play')
+    },
+    // 暂停视频
+    videoPause() {
+      this.$refs.videoRef.pause()
+    },
+    // 开始播放
+    onPlay() {
+      this.showPlayBtn = false
+    },
+    // 暂停播放
+    onPause() {
+      this.showPlayBtn = true
+    },
+    // 播放失败
+    videoErrorCallback(error) {
+      if (!this.videoLoad) {
+        uni.showToast({
+          icon: 'error',
+          title: '视频加载失败',
+        })
+      }
+    },
+    // 播放进度
+    onTimeupdate(video) {
+      const { currentTime, duration } = video.detail
+      this.currentTime = currentTime
+      this.progressWidth = (currentTime / duration) * this.windowWidth
+    },
+    // 数据记录
+    async videoUpdate(type) {
+      const typeMap = {
+        play: 'view_count', // 播放量
+        collect: 'collect_count', // 收藏量
+        forward: 'forward_count', // 分享量
+      }
+
+      const { Id, view_count } = this.videoDetail
+      const count = this.videoDetail[typeMap[type]] || 0
+      await update(Id, { [typeMap[type]]: Number(count) + 1 })
+      this.videoDetail[typeMap[type]] = Number(count) + 1
+    },
+    searchVideo() {},
+  },
+}
+</script>
+
+<style lang="scss">
+.player {
+  width: 300px;
+  height: 700px;
+  color: #dcdfe6;
+}
+
+.video-play-btn {
+  position: fixed;
+  width: 100px;
+  height: 100px;
+}
+
+.video-header {
+  position: fixed;
+  height: 68rpx;
+  padding: 0px 20rpx;
+  // box-sizing: border-box;
+  top: 24rpx;
+  left: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  .left-icon {
+    margin-right: 24rpx;
+  }
+  .right-icon {
+    width: 48rpx;
+    height: 48rpx;
+    margin-left: 24rpx;
+  }
+  .u-input {
+    flex: 1;
+  }
+  .search {
+    opacity: 0.5;
+  }
+}
+
+.video-header-input {
+  flex: 1;
+  background: rgba(216, 216, 216, 0.5);
+	padding: 5px;
+	font-size: 14px;
+}
+
+.video-info {
+  position: fixed;
+  height: 90px;
+  left: 0;
+  bottom: 140rpx;
+  padding: 0 20rpx;
+}
+
+.video-info-title {
+  color: #ffffff;
+  width: 100%;
+  max-width: 100%;
+  font-size: 36rpx;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-bottom: 12rpx;
+}
+
+.video-info-desc {
+  height: 30px;
+  display: flex;
+  padding: 0 6rpx;
+  justify-content: space-between;
+  align-items: flex-end;
+  font-size: 24rpx;
+
+  .descBtn {
+    width: 72rpx;
+    min-width: 72rpx;
+    margin-left: 6rpx;
+  }
+}
+
+.video-info-desc-desc {
+  width: 300px;
+  height: fit-content;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #fff;
+  &.unfold {
+    white-space: wrap;
+    word-wrap: break-word;
+  }
+}
+
+.video-tools {
+  position: fixed;
+  width: 60rpx;
+  height: 420rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  bottom: 140rpx;
+  right: 28rpx;
+}
+
+.video-tools_video-icon {
+  width: 60rpx;
+  height: 60rpx;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.video-tools_video-icon-num {
+  color: #fff;
+  font-size: 28rpx;
+  font-weight: 600;
+}
+
+.video-progress {
+  position: fixed;
+  height: 2px;
+  left: 0;
+  bottom: 120rpx;
+  background-color: #cccccc;
+}
+
+.video-progress2 {
+  height: 2px;
+  background-color: #fff;
+}
+</style>

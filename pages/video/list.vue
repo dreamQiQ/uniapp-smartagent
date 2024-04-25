@@ -11,8 +11,7 @@
             :ref="'tabitem' + index"
             :data-id="index"
             :data-current="index"
-            @tap="activeColNav(nav)"
-          >
+            @tap="activeColNav(nav)">
             {{ nav }}
           </view>
         </view>
@@ -30,8 +29,7 @@
             :ref="'tabitem' + index"
             :data-id="index"
             :data-current="index"
-            @tap="activeNavItem(item)"
-          >
+            @tap="activeNavItem(item)">
             {{ item }}
           </view>
         </view>
@@ -86,13 +84,13 @@ export default {
         移民: ['全部', '婚姻', '亲属', '职业', '家暴', '非移民签证', '其他'],
         财税: ['全部', '贷款', '个人财税', '公司财税', '财产信托规划'],
         工作创业: ['全部', '创业', '工作', '公司服务', '生意买卖'],
-        生活: ['全部', '理财', '交通', '安全', '医疗', '交通']
+        生活: ['全部', '理财', '交通', '安全', '医疗', '交通'],
       },
       activeType: '热门视频',
       videoList: [],
       page: 1,
       pageSize: 20,
-      totle: 0
+      totle: 0,
     }
   },
   onShow() {
@@ -150,7 +148,7 @@ export default {
         const params = {
           limit: pageSize,
           offset: (page - 1) * pageSize,
-          where
+          where,
         }
         const result = await list(params)
         this.videoList.push(...result.list)
@@ -169,7 +167,7 @@ export default {
       }
     },
     storageVideoList(list) {
-      const videoUrlList = list.map((i) => i.video_file[0].url).filter((i) => i)
+      const videoUrlList = list.map(i => i.video_file[0].url).filter(i => i)
     },
     // 获取视频封面
     getVideoImg(item) {
@@ -188,10 +186,15 @@ export default {
     // 播放
     onPlayer(item) {
       uni.setStorageSync('video', item)
+      //#ifdef H5
       uni.navigateTo({ url: `/pages/video/player?id=${item.Id}` })
-    }
+      //#endif
+      //#ifdef APP-PLUS
+      uni.navigateTo({ url: `/pages/video/nplayer?id=${item.Id}` })
+      //#endif
+    },
   },
-  components: {}
+  components: {},
 }
 </script>
 <style lang="scss" scoped>
