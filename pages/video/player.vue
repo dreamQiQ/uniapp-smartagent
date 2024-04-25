@@ -12,15 +12,16 @@
       @play="onPlay"
       @pause="onPause"
       @error="videoErrorCallback"
-      @timeupdate="onTimeupdate"></video>
+      @timeupdate="onTimeupdate"
+    ></video>
 
     <!-- 播放header -->
     <view class="video-header">
-      <u-image class="left-icon" src="@/static/svg/arrow-left-s-fill.svg" width="48rpx" height="48rpx" @tap="goBack" />
+      <u-image v-if="isToken" class="left-icon" src="@/static/svg/arrow-left-s-fill.svg" width="48rpx" height="48rpx" @tap="goBack" />
       <u-input v-model="searchVal" placeholder="搜索你想看的视频" placeholderStyle="color: #979797;" @change="searchVideo">
         <img class="search" slot="prefix" src="@/static/svg/find-replace-fill.svg" />
       </u-input>
-      <img class="right-icon" src="@/static/svg/more-2-fill.svg" />
+      <!-- <img class="right-icon" src="@/static/svg/more-2-fill.svg" /> -->
     </view>
     <!-- 播放按钮 -->
     <view v-show="showPlayBtn && videoSrc" class="video-play-btn" @tap.stop="videoPlay">
@@ -28,7 +29,7 @@
     </view>
     <!-- 视频信息 -->
     <view class="video-info">
-      <view class="video-title">{{ videoDetail.Title }}</view>
+      <view class="video-title">{{ videoDetail.title }}</view>
       <view class="video-desc" v-show="videoDetail.desc">
         <view class="desc" :class="{ unfold: descUnfold }">{{ videoDetail.desc }}</view>
         <view class="descBtn" @tap="descUnfold = !descUnfold">{{ descUnfold ? '收起' : '展开' }}</view>
@@ -37,23 +38,22 @@
     <!-- 工作栏 -->
     <view class="video-tools">
       <view class="video-icon">
-        <u-image src="@/static/svg/play-list-2-fill.svg" width="60rpx" height="60rpx" />
-        <view class="num">{{ videoDetail.view_count || 0 }}</view>
+        <u-image src="@/static/images/play-list-2-fill.png" width="60rpx" height="60rpx" />
+        <view class="num">{{ videoDetail.viewCount || 0 }}</view>
       </view>
       <view class="video-icon">
-        <u-icon name="heart-fill" size="60rpx" color="#D8D8D8"></u-icon>
-        <view class="num">{{ videoDetail.collect_count || 0 }}</view>
+        <u-icon name="heart-fill" size="60rpx" :color="videoDetail.isCollection ? '#F52929' : '#D8D8D8'" @tap="videoUpdate(2)" />
+        <view class="num">{{ videoDetail.collectCount || 0 }}</view>
       </view>
       <view class="video-icon">
-        <u-image src="@/static/svg/share-forward-fill.svg" width="60rpx" height="60rpx" @tap="videoUpdate('forward')" />
-        <view class="num">{{ videoDetail.forward_count || 0 }}</view>
+        <u-image src="@/static/images/share-forward-fill.png" width="60rpx" height="60rpx" @tap="videoUpdate(3)" />
+        <view class="num">{{ videoDetail.forwardCount || 0 }}</view>
       </view>
     </view>
   </view>
 </template>
 
 <script>
-import { detail, update } from '@/api/video.js'
 import playerMixin from './player.mixin'
 
 export default {
@@ -74,8 +74,8 @@ export default {
       const width = (currentTime / duration) * 100 + '%'
       buffered[0].style.width = width
       buffered[0].style['background-color'] = '#fff'
-    },
-  },
+    }
+  }
 }
 </script>
 

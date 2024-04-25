@@ -11,7 +11,8 @@
             :ref="'tabitem' + index"
             :data-id="index"
             :data-current="index"
-            @tap="activeColNav(nav)">
+            @tap="activeColNav(nav)"
+          >
             {{ nav }}
           </view>
         </view>
@@ -29,7 +30,8 @@
             :ref="'tabitem' + index"
             :data-id="index"
             :data-current="index"
-            @tap="activeNavItem(item)">
+            @tap="activeNavItem(item)"
+          >
             {{ item }}
           </view>
         </view>
@@ -37,8 +39,8 @@
     </scroll-view>
 
     <view class="type-list">
-      <view :class="{ 'type-item': true, activeType: activeType === '热门视频' }" @tap="activeVideoType('热门视频')">热门视频</view>
-      <view :class="{ 'type-item': true, activeType: activeType === '最近更新' }" @tap="activeVideoType('最近更新')">最近更新</view>
+      <view :class="{ 'type-item': true, activeType: activeType === 1 }" @tap="activeVideoType(1)">热门视频</view>
+      <view :class="{ 'type-item': true, activeType: activeType === 2 }" @tap="activeVideoType(2)">最近更新</view>
     </view>
     <!-- 视频列表 -->
     <u-list height="calc(100% - 216rpx)" @scrolltolower="scrolltolower" v-if="videoList && videoList.length">
@@ -47,14 +49,17 @@
           <view class="item-left">
             <view class="item-img">
               <u-image :src="getVideoImg(item)" width="200rpx" height="128rpx" radius="14rpx" />
-              <view class="date">{{ item.CreatedAt | timeFormat }}</view>
+              <view class="date">{{ item.uploadDate | timeFormat }}</view>
             </view>
 
             <view class="item-content">
-              <view class="title">{{ item.Title }}</view>
-              <view>{{ item.view_count || 0 }} 次播放</view>
-              <view>{{ item.forward_count || 0 }} 次转发</view>
+              <view class="title">{{ item.title }}</view>
+              <view>{{ item.viewCount || 0 }} 次播放</view>
+              <view>{{ item.forwardCount || 0 }} 次转发</view>
             </view>
+          </view>
+          <view class="item-right" @tap.stop="shareVideo(item)">
+            <image class="u-img" src="@/static/images/share-box-fill.png"></image>
           </view>
         </view>
       </u-list-item>
@@ -69,12 +74,13 @@
 </template>
 <script>
 import { list } from '@/api/video.js'
+import { getUserInfo } from '@/api/system.js'
 
 export default {
   data() {
     const that = this
     return {
-      activeNav: '保险',
+      activeNav: '',
       videoNav: ['保险', '法律', '房产置业', '移民', '财税', '工作创业', '生活'],
       activeItem: '全部',
       navList: {
@@ -84,21 +90,23 @@ export default {
         移民: ['全部', '婚姻', '亲属', '职业', '家暴', '非移民签证', '其他'],
         财税: ['全部', '贷款', '个人财税', '公司财税', '财产信托规划'],
         工作创业: ['全部', '创业', '工作', '公司服务', '生意买卖'],
-        生活: ['全部', '理财', '交通', '安全', '医疗', '交通'],
+        生活: ['全部', '理财', '交通', '安全', '医疗', '交通']
       },
-      activeType: '热门视频',
+      activeType: 1,
       videoList: [],
       page: 1,
       pageSize: 20,
-      totle: 0,
+      totle: 0
     }
   },
-  onShow() {
-    const videoMenu = uni.getStorageSync('videoMenu')
-    this.activeNav = (videoMenu && videoMenu.level1) || this.videoNav[0]
-    this.activeItem = (videoMenu && videoMenu.level2) || this.navList[this.videoNav][0]
-
-    this.videoList = []
+  async onLoad() {
+    const { result } = await getUserInfo()
+    if (result.industry) {
+      const index = this.videoNav.findIndex((item) => item === result.industry)
+      this.videoNav.splice(index, 1)
+      this.videoNav.unshift(result.industry)
+      this.activeNav = result.industry
+    }
     this.init()
   },
   onPullDownRefresh() {
@@ -115,7 +123,7 @@ export default {
     activeColNav(nav) {
       this.activeNav = nav
       this.activeItem = '全部'
-      this.activeType = '热门视频'
+      this.activeType = 1
 
       this.videoList = []
       this.getVideos()
@@ -123,7 +131,7 @@ export default {
     // 选中导航栏项
     activeNavItem(item) {
       this.activeItem = item
-      this.activeType = '热门视频'
+      this.activeType = 1
 
       this.videoList = []
       this.getVideos()
@@ -141,23 +149,13 @@ export default {
       try {
         uni.showLoading()
         const { page, pageSize, activeType, activeNav, activeItem } = this
-
-        let where = `(primary_type,eq,${activeNav})`
-        if (activeItem !== '全部') where += `~and(secondary_type,eq,${activeItem})`
-
         const params = {
-          limit: pageSize,
-          offset: (page - 1) * pageSize,
-          where,
+          primaryType: activeNav,
+          secondaryType: activeItem === '全部' ? '' : activeItem,
+          sortScene: activeType
         }
-        const result = await list(params)
-        this.videoList.push(...result.list)
-        this.totle = result.pageInfo.totalRows
-        // 缓存视频
-        this.storageVideoList(this.videoList)
-        // 缓存菜单数据
-        const menuVal = { level1: activeNav, level2: activeItem }
-        uni.setStorageSync('videoMenu', menuVal)
+        const { result } = await list(params)
+        this.videoList = result
 
         uni.stopPullDownRefresh()
         uni.hideLoading()
@@ -166,35 +164,40 @@ export default {
         uni.hideLoading()
       }
     },
-    storageVideoList(list) {
-      const videoUrlList = list.map(i => i.video_file[0].url).filter(i => i)
-    },
     // 获取视频封面
     getVideoImg(item) {
-      if (item.video_img && item.video_img.length) {
-        return item.video_img[0].url
+      if (item.videoImg && item.videoImg.length) {
+        console.log('🚀 ~ getVideoImg ~ item.videoImg[0].url:', item.videoImg[0].url)
+        return item.videoImg[0].url
       }
       return ''
     },
     // 触底加载
     scrolltolower() {
-      const { page, pageSize } = this
-      if (page * pageSize >= this.totle) return
-      this.page += 1
-      this.getVideos()
+      // const { page, pageSize } = this
+      // if (page * pageSize >= this.totle) return
+      // this.page += 1
+      // this.getVideos()
     },
     // 播放
     onPlayer(item) {
       uni.setStorageSync('video', item)
       //#ifdef H5
-      uni.navigateTo({ url: `/pages/video/player?id=${item.Id}` })
+      uni.navigateTo({ url: `/pages/video/player?id=${item.id}` })
       //#endif
       //#ifdef APP-PLUS
-      uni.navigateTo({ url: `/pages/video/nplayer?id=${item.Id}` })
+      uni.navigateTo({ url: `/pages/video/nplayer?id=${item.id}` })
       //#endif
     },
+    // 分享
+    shareVideo(item) {
+      uni.shareWithSystem({
+        summary: item.title,
+        href: `http://123.6.102.119:8053/#/pages/video/player?id=${item.id}`,
+      })
+    }
   },
-  components: {},
+  components: {}
 }
 </script>
 <style lang="scss" scoped>
@@ -338,6 +341,12 @@ export default {
           font-size: 24rpx;
           font-weight: 500;
         }
+      }
+    }
+    .item-right {
+      .u-img {
+        width: 48rpx;
+        height: 48rpx;
       }
     }
   }

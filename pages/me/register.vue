@@ -38,7 +38,7 @@
       </u-form-item>
       <u-picker :show="industryShow" :columns="industryColumns" :closeOnClickOverlay="true" @close="industryShow = false" @cancel="industryShow = false" @confirm="confirm"></u-picker>
     </u-form>
-    <button class="subButton" :class="{ disabledBtn: disabledBtn }" @tap="submit">登录</button>
+    <button class="subButton" :class="{ disabledBtn: disabledBtn }" @tap="submit">注册</button>
   </view>
 </template>
 <script>

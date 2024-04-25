@@ -1,11 +1,11 @@
 import { get, post, requestUpload, patch } from '@/common/utils/request'
 
 export async function list(params) {
-  return get('/gomk/nocodbv2/api/v1/db/data/noco/SMART_POWER/video', params)
+  return get('/gomk/dcs/smart-agent/video', params)
 }
 
 export async function detail(params) {
-  return get('/gomk/nocodbv2/api/v1/db/data/noco/SMART_POWER/video/find-one', params)
+  return get(`/gomk/dcs/smart-agent/video/info/${params}`)
 }
 
 export async function upload(params) {
@@ -17,6 +17,6 @@ export async function add(params) {
   return post('/gomk/nocodbv2/api/v1/db/data/noco/SMART_POWER/video', params)
 }
 
-export async function update(id, params) {
-  return patch(`/gomk/nocodbv2/api/v1/db/data/noco/SMART_POWER/video/${id}`, params)
+export async function update(params) {
+  return post(`/gomk/dcs/smart-agent/video/count`, params)
 }

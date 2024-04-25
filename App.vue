@@ -5,10 +5,10 @@ export default {
   data() {
     return {}
   },
-  onLaunch: function () {
+  onLaunch: function (options) {
     const token = uni.getStorageSync('token')
 
-    if (!token) {
+    if (!token && options.path !== 'pages/video/player') {
       uni.reLaunch({
         url: '/pages/me/login',
         success: () => {
@@ -17,7 +17,7 @@ export default {
           //#endif
         }
       })
-    } else {
+    } else if (options.path !== 'pages/video/player') {
       store.dispatch('getUserInfo')
     }
   },

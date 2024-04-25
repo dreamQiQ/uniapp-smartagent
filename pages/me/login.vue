@@ -99,7 +99,6 @@ export default {
 
           uni.setStorageSync('token', res.data.access_token)
           uni.setStorageSync('user_id', res.data.user_id)
-          uni.setStorageSync('videoMenu', '')
 
           store.dispatch('getUserInfo')
           uni.reLaunch({ url: '/pages/video/home' })

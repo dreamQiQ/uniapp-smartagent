@@ -58,10 +58,13 @@
           <view class="message"> 1 </view>
         </view>
       </view>
-      <view class="vip-btn" @tap="openVipModel"> 7天免费使用并开通 </view>
-      <u-checkbox-group v-model="agreement" placement="row">
-        <u-checkbox label="开通前阅读《会员服务协议》及《自动续费服务规则》" :name="true" shape="circle" labelSize="26rpx" />
-      </u-checkbox-group>
+      <view class="vip-foolter">
+        <view class="vip-btn" @tap="openVipModel"> 7天免费使用并开通 </view>
+        <u-checkbox-group v-model="agreement" placement="row">
+          <u-checkbox label="开通前阅读《会员服务协议》及《自动续费服务规则》" :name="true" shape="circle" labelSize="26rpx" />
+        </u-checkbox-group>
+      </view>
+
       <!-- vip弹窗 -->
       <u-modal :show="vipModal" :closeOnClickOverlay="true" @close="vipModal = false">
         <view slot="default" class="model-content">
@@ -164,6 +167,7 @@ export default {
 .vip-page {
   width: 100%;
   height: auto;
+  padding-bottom: 140rpx;
   .vip {
     padding: 32rpx 26rpx;
     .vip-title {
@@ -269,6 +273,13 @@ export default {
         line-height: 40rpx;
         margin-top: 28rpx;
       }
+    }
+    .vip-foolter {
+      width: 100%;
+      position: fixed;
+      bottom: 20rpx;
+      left: 50%;
+      margin-left: -50%;
     }
     .vip-btn {
       width: 80%;

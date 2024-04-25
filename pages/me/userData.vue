@@ -1,14 +1,6 @@
 <template>
   <view class="user-data">
-    <u-avatar
-      :class="{ loading: loading }"
-      :src="userInfo.avatar"
-      mode="aspectFill"
-      default-url="../../static/images/defaultAvatar.png"
-      shape="circle"
-      size="160rpx"
-      @tap="uploadAvatar"
-    ></u-avatar>
+    <u-avatar :class="{ loading: loading }" :src="userInfo.avatar" mode="aspectFill" default-url="../../static/images/defaultAvatar.png" shape="circle" size="160rpx" @tap="uploadAvatar"></u-avatar>
 
     <u-cell-group :border="false" :customStyle="groupStyle">
       <u-cell title="英文名" :titleStyle="titleStyle" :isLink="true" @tap="openPopup('英文名', 'nickName')">
@@ -84,15 +76,15 @@
       </u-cell>
     </u-cell-group>
     <!-- 弹出 -->
-    <u-popup :show="showPopup" :round="10" :closeOnClickOverlay="true" mode="bottom" customStyle="padding: 30rpx" @close="closePopup">
+    <u-popup :show="showPopup" :round="10" :closeOnClickOverlay="true" mode="bottom" customStyle="padding: 30rpx; height: auto; max-height: 80vh" @close="closePopup">
       <view class="popup-header">
         <view @tap="closePopup"> 关闭 </view>
         <view @tap="editUserData">完成</view>
       </view>
 
-      <u-form ref="form" :model="formData" :rules="rules" labelPosition="top" labelWidth="auto" style="margin: 44rpx 0rpx 16rpx">
-        <u-form-item v-if="field === 'businessBrief'" :prop="field">
-          <u-textarea v-model="formData[field]" :maxlength="-1" :placeholder="placeholder" style="background-color: #f5f7fa" />
+      <u-form ref="form" :model="formData" :rules="rules" labelPosition="top" labelWidth="auto" style="margin: 44rpx 0rpx 16rpx; height: auto; max-height: 100%; overflow: auto">
+        <u-form-item v-if="['businessBrief', 'companyAddress'].includes(field)" :prop="field">
+          <u-textarea v-model="formData[field]" :maxlength="-1" :autoHeight="true" :cursorSpacing="20" :placeholder="placeholder" style="background-color: #f5f7fa" />
         </u-form-item>
         <u-form-item v-else-if="field === 'industry'" :prop="field" @tap="industryShow = true">
           <u-input v-model="formData[field]" :readonly="true" :placeholder="placeholder" fontSize="32rpx" type="text" :placeholderStyle="placeholderStyle" style="background-color: #f5f7fa">
@@ -134,7 +126,9 @@ export default {
       placeholderStyle: 'color: #ccc; font-size: 32rpx;',
       showPopup: false,
       userInfo: {},
-      formData: {},
+      formData: {
+        nickName: ''
+      },
       placeholder: '',
       field: '',
       industryShow: false,
@@ -184,9 +178,11 @@ export default {
   methods: {
     // 获取用户信息
     async getUserData() {
+      uni.showLoading()
       const { result } = await getUserInfo()
       this.userInfo = result
       this.formData = JSON.parse(JSON.stringify(result))
+      uni.hideLoading()
     },
     // 上传头像
     async uploadAvatar(event) {
@@ -295,6 +291,7 @@ export default {
   width: 100%;
   height: 100%;
   padding: 30rpx;
+  overflow: auto;
   background-color: #f1f3f8;
   .u-avatar {
     margin: 0 auto;
@@ -322,6 +319,9 @@ export default {
     align-items: center;
     justify-content: space-between;
     color: #979797;
+  }
+  .cell-right {
+    max-width: 65vw;
   }
 }
 </style>
