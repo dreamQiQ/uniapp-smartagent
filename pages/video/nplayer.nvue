@@ -104,6 +104,12 @@ export default {
     } else if (this.id) {
       await this.getDetail()
     }
+
+    //#ifdef APP-PLUS
+    this.$nextTick(() => {
+      this.videoPlay()
+    })
+    //#endif
     uni.hideLoading()
   },
   methods: {
@@ -129,7 +135,6 @@ export default {
     },
     // 播放视频
     async videoPlay() {
-      console.log('videoPlay')
       this.$refs.videoRef.play()
       // 记录播放量
       await this.videoUpdate('play')
@@ -221,8 +226,8 @@ export default {
 .video-header-input {
   flex: 1;
   background: rgba(216, 216, 216, 0.5);
-	padding: 5px;
-	font-size: 14px;
+  padding: 5px;
+  font-size: 14px;
 }
 
 .video-info {
