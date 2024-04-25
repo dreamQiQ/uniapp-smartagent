@@ -2,7 +2,7 @@
   <view class="user-page">
     <view class="user-info">
       <view class="user-avatar-name">
-        <u-image :src="avatar" shape="circle" width="120rpx" height="120rpx" style="margin-right: 30rpx" />
+        <u-avatar :src="avatar" mode="aspectFill" shape="circle" size="120rpx" style="margin-right: 30rpx"></u-avatar>
         <view class="user-name-id">
           <view class="user-name-vip">
             <view class="user-name"> {{ userInfo.nickName }} </view>

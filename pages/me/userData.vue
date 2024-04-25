@@ -1,6 +1,14 @@
 <template>
   <view class="user-data">
-    <u-image :class="{ loading: loading }" :src="userInfo.avatar" shape="circle" width="160rpx" height="160rpx" @tap="uploadAvatar" />
+    <u-avatar
+      :class="{ loading: loading }"
+      :src="userInfo.avatar"
+      mode="aspectFill"
+      default-url="../../static/images/defaultAvatar.png"
+      shape="circle"
+      size="160rpx"
+      @tap="uploadAvatar"
+    ></u-avatar>
 
     <u-cell-group :border="false" :customStyle="groupStyle">
       <u-cell title="英文名" :titleStyle="titleStyle" :isLink="true" @tap="openPopup('英文名', 'nickName')">
@@ -165,7 +173,8 @@ export default {
     }
   },
   onShow() {
-    this.getUserData()
+    this.userInfo = this.$store.state.userInfo
+    if (!this.userInfo?.userId) this.getUserData()
   },
   // 下拉刷新
   async onPullDownRefresh() {
@@ -198,20 +207,18 @@ export default {
             that.loading = false
           } catch (error) {
             that.loading = false
-            that.$refs.uNotify.show({
+          }
+        },
+        fail: ({ errMsg }) => {
+          console.log('🚀 ~ uploadAvatar ~ err:', errMsg)
+          this.loading = false
+          if (errMsg !== 'chooseImage:fail cancel') {
+            this.$refs.uNotify.show({
               type: 'error',
               message: '上传失败',
               fontSize: '24rpx'
             })
           }
-        },
-        fail: () => {
-          this.loading = false
-          this.$refs.uNotify.show({
-            type: 'error',
-            message: '上传失败',
-            fontSize: '24rpx'
-          })
         }
       })
     },
@@ -289,11 +296,10 @@ export default {
   height: 100%;
   padding: 30rpx;
   background-color: #f1f3f8;
-  .u-transition {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  .u-avatar {
+    margin: 0 auto;
     margin-bottom: 80rpx;
+    border: 1px solid #d3d4d6;
     &.loading {
       opacity: 0.5;
     }
