@@ -9,7 +9,7 @@
       :loop="true"
       :controls="false"
       :show-center-play-btn="false"
-      @tap.stop="videoPause"
+      @tap.stop="checkVideoPlay"
       @play="onPlay"
       @pause="onPause"
       @error="videoErrorCallback"
@@ -24,7 +24,7 @@
     </cover-view>
     <!-- 播放按钮 -->
     <cover-view>
-      <view v-if="showPlayBtn && videoSrc" class="video-play-btn" :style="`left:${(windowWidth / 2 - 50) * 2}rpx;top:${windowHeight / 2 - 50}`" @tap.stop="videoPlay">
+      <view v-if="showPlayBtn && videoSrc" class="video-play-btn" :style="`left:${(windowWidth / 2 - 50) * 2}rpx;top:${windowHeight / 2 - 50}`">
         <u-icon name="play-right-fill" color="rgba(220, 223, 230, 0.56)" size="100px"></u-icon>
       </view>
     </cover-view>
@@ -68,7 +68,7 @@
 <script>
 import { detail, update } from '@/api/video.js'
 import playerMixin from './player.mixin'
-import color from 'uview-ui/libs/config/color'  
+import color from 'uview-ui/libs/config/color'
 
 export default {
   mixins: [playerMixin],

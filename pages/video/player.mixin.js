@@ -17,7 +17,8 @@ module.exports = {
       videoLoad: 0,
       windowWidth: 0,
       windowHeight: 0,
-      progressWidth: 0
+      progressWidth: 0,
+      isPlay: false
     }
   },
   computed: {
@@ -67,15 +68,16 @@ module.exports = {
         url: '/pages/video/list'
       })
     },
-    // 播放视频
-    // 记录播放量
-    async videoPlay() {
-      this.$refs.videoRef.play()
-      if (this.isToken) await this.videoUpdate(1)
-    },
-    // 暂停视频
-    videoPause() {
-      this.$refs.videoRef.pause()
+    // 视频播放暂停
+    async checkVideoPlay() {
+      const { isPlay } = this
+      if (isPlay) {
+        this.$refs.videoRef.pause()
+      } else {
+        this.$refs.videoRef.play()
+        if (this.isToken) await this.videoUpdate(1)
+      }
+      this.isPlay = !isPlay
     },
     // 开始播放
     onPlay() {

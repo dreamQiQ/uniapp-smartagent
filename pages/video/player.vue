@@ -8,7 +8,7 @@
       :loop="true"
       :controls="true"
       :show-center-play-btn="false"
-      @tap.stop="videoPause"
+      @tap.stop="checkVideoPlay"
       @play="onPlay"
       @pause="onPause"
       @error="videoErrorCallback"
@@ -24,7 +24,7 @@
       <!-- <img class="right-icon" src="@/static/svg/more-2-fill.svg" /> -->
     </view>
     <!-- 播放按钮 -->
-    <view v-show="showPlayBtn && videoSrc" class="video-play-btn" @tap.stop="videoPlay">
+    <view v-show="showPlayBtn && videoSrc" class="video-play-btn" @tap.stop="checkVideoPlay">
       <u-icon name="play-right-fill" color="rgba(220, 223, 230, 0.56)" size="180rpx"></u-icon>
     </view>
     <!-- 视频信息 -->
