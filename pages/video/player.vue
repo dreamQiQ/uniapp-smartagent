@@ -159,9 +159,7 @@ export default {
       max-width: 100%;
       font-size: 36rpx;
       font-weight: 600;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+      word-wrap: break-word;
       margin-bottom: 12rpx;
     }
     .video-desc {

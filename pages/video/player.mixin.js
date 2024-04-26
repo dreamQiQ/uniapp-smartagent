@@ -42,7 +42,7 @@ module.exports = {
     const video = uni.getStorageSync('video')
     if (video) {
       this.videoDetail = video
-      if (!video?.videoFile) return false
+      if (!video?.videoFile.length) return false
       this.videoSrc = video?.videoFile && video.videoFile[0].url
       this.videoLoad = 2
     } else if (this.id) {
