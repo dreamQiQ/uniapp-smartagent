@@ -33,7 +33,7 @@
       <view class="video-info" :style="`width:${windowWidth * 0.85 * 2}rpx;`">
         <text class="video-info-title">{{ videoDetail.title }}</text>
         <view class="video-info-desc" v-if="videoDetail.desc">
-          <text class="video-info-desc-desc">{{ descUnfold ? videoDetail.desc : videoDetail.desc.slice(0, 18) }}</text>
+          <text class="video-info-desc-desc">{{ descUnfold ? videoDetail.desc : videoDetail.desc.slice(0, 22) }}</text>
           <text class="descBtn" @tap="descUnfold = !descUnfold">{{ descUnfold ? '收起' : '展开' }}</text>
         </view>
       </view>
@@ -143,8 +143,8 @@ export default {
 
 .video-info-title {
   color: #ffffff;
-  width: 100%;
-  max-width: 100%;
+  width: auto;
+  max-width: 550rpx;
   font-size: 36rpx;
   font-weight: 600;
   overflow: hidden;
@@ -161,7 +161,7 @@ export default {
 }
 
 .video-info-desc-desc {
-  width: 500rpx;
+  width: 550rpx;
   height: auto;
   color: #fff;
   padding: 0px;

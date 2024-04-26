@@ -1,4 +1,4 @@
-import { get, post, requestUpload, patch } from '@/common/utils/request'
+import { get, post, requestUpload, put } from '@/common/utils/request'
 
 export async function list(params) {
   return get('/gomk/dcs/smart-agent/video', params)
@@ -19,4 +19,8 @@ export async function add(params) {
 
 export async function update(params) {
   return post(`/gomk/dcs/smart-agent/video/count`, params)
+}
+
+export async function videoType(params) {
+  return get(`/gomk/dcs/smart-agent/video-classification/tree`, params)
 }

@@ -4,16 +4,16 @@
       <view class="nav-bar-list">
         <view class="nav-ul">
           <view
-            :class="{ 'bar-item': true, active: activeNav == nav }"
+            :class="{ 'bar-item': true, active: activeNav == nav.classificationName }"
             v-for="(nav, index) in videoNav"
-            :key="nav"
-            :id="nav"
+            :key="nav.id"
+            :id="nav.id"
             :ref="'tabitem' + index"
-            :data-id="index"
-            :data-current="index"
+            :data-id="nav.id"
+            :data-current="nav.id"
             @tap="activeColNav(nav)"
           >
-            {{ nav }}
+            {{ nav.classificationName }}
           </view>
         </view>
       </view>
@@ -23,16 +23,16 @@
       <view class="nav-bar-list">
         <view class="nav-ul" style="gap: 22rpx; height: auto">
           <view
-            :class="{ 'nav-item': true, activeItem: activeItem == item }"
-            v-for="(item, index) in navList[activeNav]"
-            :key="item"
-            :id="item"
-            :ref="'tabitem' + index"
-            :data-id="index"
-            :data-current="index"
+            :class="{ 'nav-item': true, activeItem: activeItem == item.classificationName }"
+            v-for="(item, index) in navList"
+            :key="item.id"
+            :id="item.id"
+            :ref="'tabitem' + item.id"
+            :data-id="item.id"
+            :data-current="item.id"
             @tap="activeNavItem(item)"
           >
-            {{ item }}
+            {{ item.classificationName }}
           </view>
         </view>
       </view>
@@ -43,8 +43,8 @@
       <view :class="{ 'type-item': true, activeType: activeType === 2 }" @tap="activeVideoType(2)">最近更新</view>
     </view>
     <!-- 视频列表 -->
-    <view class="list" v-for="(item, index) in videoList" :key="item.id" style="margin-bottom: 36rpx">
-      <view class="list-item" @tap="onPlayer(item)">
+    <view class="list">
+      <view class="list-item" v-for="(item, index) in videoList" :key="item.id" style="margin-bottom: 36rpx" @tap="onPlayer(item)">
         <view class="item-left">
           <view class="item-img">
             <u-image :src="getVideoImg(item)" loadingIcon="photo-fill" width="200rpx" height="128rpx" radius="14rpx" />
@@ -74,7 +74,7 @@
   </view>
 </template>
 <script>
-import { list } from '@/api/video.js'
+import { videoType, list } from '@/api/video.js'
 import { getUserInfo } from '@/api/system.js'
 
 export default {
@@ -82,17 +82,8 @@ export default {
     const that = this
     return {
       activeNav: '',
-      videoNav: ['保险', '法律', '房产置业', '移民', '财税', '工作创业', '生活'],
+      videoNav: [],
       activeItem: '全部',
-      navList: {
-        保险: ['全部', '金融理财', '人寿保险', '医疗保险', '汽车保险', '房屋保险', '旅游保险'],
-        法律: ['全部', '刑事', '家庭', '交通', '意外伤害', '商业', '知识产权', '房地产'],
-        房产置业: ['全部', '住宅', '商业', '工业', '土地', '其他'],
-        移民: ['全部', '婚姻', '亲属', '职业', '家暴', '非移民签证', '其他'],
-        财税: ['全部', '贷款', '个人财税', '公司财税', '财产信托规划'],
-        工作创业: ['全部', '创业', '工作', '公司服务', '生意买卖'],
-        生活: ['全部', '理财', '交通', '安全', '医疗', '交通']
-      },
       activeType: 1,
       videoList: [],
       page: 1,
@@ -100,20 +91,32 @@ export default {
       totle: 0
     }
   },
+  computed: {
+    navList() {
+      const { videoNav, activeNav } = this
+      const data = videoNav.find((i) => i.classificationName == activeNav)
+      if (data && data.children && !data.children.some((i) => i.classificationName === '全部')) data.children.unshift({ classificationName: '全部' })
+      return (data && data.children) || []
+    }
+  },
   async onLoad() {
+    await this.getVideoType()
     const { result } = await getUserInfo()
+
     if (result.industry) {
-      const index = this.videoNav.findIndex((item) => item === result.industry)
+      const index = this.videoNav.findIndex((item) => item.classificationName === result.industry)
+      const data = this.videoNav.find((item) => item.classificationName === result.industry)
       this.videoNav.splice(index, 1)
-      this.videoNav.unshift(result.industry)
-      this.activeNav = result.industry
+      this.videoNav.unshift(data)
+      this.activeNav = data.classificationName
+    } else {
+      this.activeNav = this.videoNav[0].classificationName
     }
   },
   onShow() {
     this.init()
   },
   onPullDownRefresh() {
-    console.log('1111111')
     this.init()
   },
   methods: {
@@ -125,7 +128,7 @@ export default {
     },
     // 选中导航栏
     activeColNav(nav) {
-      this.activeNav = nav
+      this.activeNav = nav.classificationName
       this.activeItem = '全部'
       this.activeType = 1
 
@@ -134,7 +137,7 @@ export default {
     },
     // 选中导航栏项
     activeNavItem(item) {
-      this.activeItem = item
+      this.activeItem = item.classificationName
       this.activeType = 1
 
       this.videoList = []
@@ -148,6 +151,11 @@ export default {
       this.activeType = type
       this.getVideos()
     },
+    // 获取视频分类
+    async getVideoType() {
+      const { result } = await videoType({ parentId: -1 })
+      this.videoNav = result
+    },
     // 获取视频列表
     async getVideos() {
       try {
@@ -160,7 +168,6 @@ export default {
         }
         const res = await list(params)
         this.videoList = res.result || []
-        console.log('🚀 ~ getVideos ~ result:', res.result)
 
         uni.stopPullDownRefresh()
         uni.hideLoading()
@@ -209,6 +216,7 @@ export default {
   width: 100%;
   height: 100%;
   padding: 32rpx 28rpx;
+  padding-bottom: 0rpx;
   box-sizing: border-box;
   background-color: #f1f3f8;
 
@@ -302,6 +310,12 @@ export default {
     }
   }
 
+  .list {
+    width: 100%;
+    height: calc(100% - 240rpx);
+    overflow: auto;
+    padding-bottom: 32rpx;
+  }
   .list-item {
     display: flex;
     align-items: center;

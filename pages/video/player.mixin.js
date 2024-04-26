@@ -42,7 +42,8 @@ module.exports = {
     const video = uni.getStorageSync('video')
     if (video) {
       this.videoDetail = video
-      this.videoSrc = video.videoFile[0].url
+      if (!video?.videoFile) return false
+      this.videoSrc = video?.videoFile && video.videoFile[0].url
       this.videoLoad = 2
     } else if (this.id) {
       await this.getDetail()
@@ -131,10 +132,11 @@ module.exports = {
     async videoUpdate(type) {
       const { id } = this.videoDetail
 
-      const params = {
+      let params = {
         id: id,
         type
       }
+      if (type === 3) params.shareUserId = this.$store.state.userInfo.userId
       const { result } = await update(params)
       switch (type) {
         case 1:
