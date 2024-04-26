@@ -172,11 +172,12 @@ export default {
   color: #fff;
   width: 60rpx;
   height: 60rpx;
-  text-align: right;
+  text-align: left;
   line-height: 80rpx;
   min-width: 72rpx;
   margin-left: 6rpx;
   font-size: 28rpx;
+  overflow: visible;
 }
 
 .video-tools {
