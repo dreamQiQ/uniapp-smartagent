@@ -15,9 +15,10 @@
         <u-input v-model="formData.nickName" color="#9e9e9e" fontSize="32rpx" type="text" :placeholderStyle="placeholderStyle" placeholder="请输入英文名" />
       </u-form-item>
       <u-form-item label="手机号" prop="mobile" class="mobile-input">
-        <u-input v-model="formData.mobile" color="#9e9e9e" fontSize="32rpx" type="text" :placeholderStyle="placeholderStyle" placeholder="请输入手机号">
-          <u--text text="+1" slot="prefix" margin="0 3px 0 0" type="tips"></u--text>
-        </u-input>
+        <view class="mobile">
+          <view class="areaCode"> +1 </view>
+          <u-input v-model="formData.mobile" color="#9e9e9e" fontSize="32rpx" type="text" :placeholderStyle="placeholderStyle" placeholder="请输入手机号" />
+        </view>
       </u-form-item>
       <u-form-item label="执照号" prop="licenseNumber">
         <u-input
@@ -39,6 +40,8 @@
       <u-picker :show="industryShow" :columns="industryColumns" :closeOnClickOverlay="true" @close="industryShow = false" @cancel="industryShow = false" @confirm="confirm"></u-picker>
     </u-form>
     <button class="subButton" :class="{ disabledBtn: disabledBtn }" @tap="submit">注册</button>
+    <!-- 提示 -->
+    <u-notify ref="uNotify"></u-notify>
   </view>
 </template>
 <script>
@@ -131,12 +134,7 @@ export default {
           uni.hideLoading()
         })
         .catch((err) => {
-          if (err.code) {
-            uni.showToast({
-              icon: 'none',
-              title: err.msg
-            })
-          }
+          this.$refs.uNotify.error(err.msg || '操作失败')
           uni.hideLoading()
         })
     },
@@ -178,6 +176,18 @@ export default {
     font-weight: 600;
     margin: 0 auto;
     margin-bottom: 32rpx;
+  }
+
+  .mobile {
+    width: 100%;
+    height: auto;
+    display: flex;
+    align-items: center;
+    color: #666;
+    font-size: 28rpx;
+    .areaCode {
+      margin-right: 32rpx;
+    }
   }
 
   .u-input {

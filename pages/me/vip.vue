@@ -128,7 +128,6 @@ export default {
     // vip model
     openVipModel() {
       const { vipId, agreement } = this
-      if (!vipId) return false
       if (!agreement?.length) {
         this.$refs.uNotify.show({
           type: 'warning',

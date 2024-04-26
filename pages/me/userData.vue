@@ -92,9 +92,12 @@
           </u-input>
         </u-form-item>
         <u-form-item v-else-if="['mobile', 'companyPhone'].includes(field)" :prop="field">
-          <u-input v-model="formData[field]" :placeholder="placeholder" fontSize="32rpx" type="text" :placeholderStyle="placeholderStyle" style="background-color: #f5f7fa">
-            <u--text text="+1" slot="prefix" margin="0 3px 0 0" type="tips"></u--text>
-          </u-input>
+          <view class="mobile">
+            <view class="areaCode"> +1 </view>
+            <u-input v-model="formData[field]" :placeholder="placeholder" fontSize="32rpx" type="text" :placeholderStyle="placeholderStyle" style="background-color: #f5f7fa" />
+          </view>
+
+          <!-- <u--text text="+1" slot="prefix" margin="0 3px 0 0" type="tips"></u--text> -->
         </u-form-item>
         <u-form-item v-else :prop="field">
           <u-input v-model="formData[field]" :placeholder="placeholder" fontSize="32rpx" type="text" :placeholderStyle="placeholderStyle" style="background-color: #f5f7fa" />
@@ -248,6 +251,7 @@ export default {
     },
     // 打开
     openPopup(type, field) {
+      this.formData = JSON.parse(JSON.stringify(this.userInfo))
       this.showPopup = true
       this.placeholder = type
       this.field = field
@@ -278,10 +282,7 @@ export default {
           this.closePopup()
         })
         .catch((err) => {
-          uni.showToast({
-            icon: 'none',
-            title: err.msg
-          })
+          this.$refs.uNotify.error(err.msg)
         })
     }
   },
@@ -324,6 +325,17 @@ export default {
   }
   .cell-right {
     max-width: 65vw;
+  }
+  .mobile {
+    width: 100%;
+    height: auto;
+    display: flex;
+    align-items: center;
+    color: #666;
+    font-size: 28rpx;
+    .areaCode {
+      margin-right: 32rpx;
+    }
   }
 }
 </style>
