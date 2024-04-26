@@ -39,7 +39,7 @@
           <view class="label">近30日浏览</view>
         </view>
       </view>
-      <u-notice-bar text="请尽快更新个人名片，避免潜在客户无法联系您~" speed="60" fontSize="20rpx"></u-notice-bar>
+      <u-notice-bar v-if="checkNotice" mode="closable" text="请尽快更新个人名片，避免潜在客户无法联系您~" speed="60" fontSize="20rpx" @close="closeNotice" />
     </view>
     <view class="card" style="padding: 14rpx 22rpx">
       <view class="card-title">推荐服务</view>
@@ -83,10 +83,10 @@ export default {
           name: '我的订单',
           img: 'order'
         }
-      ]
+      ],
+      checkNotice: true
     }
   },
-  components: {},
   computed: {
     userInfo() {
       return this.$store.state.userInfo
@@ -100,7 +100,19 @@ export default {
       return new dayjs(vipRecord.expirationTime).format('YYYY-MM-DD')
     }
   },
-  onShow() {},
+  watch: {
+    userInfo: {
+      handler() {
+        const { companyName, companyPosition } = this.userInfo
+        this.checkNotice = !(companyName && companyPosition)
+      },
+      deep: true
+    }
+  },
+  onShow() {
+    const { companyName, companyPosition } = this.userInfo
+    this.checkNotice = !(companyName && companyPosition)
+  },
   // 下拉刷新
   onPullDownRefresh() {
     this.$store.dispatch('getUserInfo')
@@ -132,6 +144,9 @@ export default {
       uni.setStorageSync('token', '')
       uni.setStorageSync('user_id', '')
       uni.reLaunch({ url: '/pages/me/login' })
+    },
+    closeNotice() {
+      this.checkNotice = false
     }
   }
 }

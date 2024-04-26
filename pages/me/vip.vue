@@ -144,9 +144,15 @@ export default {
         const { vipId, vipList } = this
         const id = vipList[vipId].price_id
         const { result } = await openVip(id)
+
+        // #ifdef H5
+        window.open(result)
+        // #endif
+        // #ifdef APP-PLUS
         plus.runtime.openURL(result, (err) => {
           console.error(err)
         })
+        // #endif
 
         this.vipModal = false
       } catch (error) {

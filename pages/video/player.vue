@@ -18,7 +18,7 @@
     <!-- 播放header -->
     <view class="video-header">
       <u-image v-if="isToken" class="left-icon" src="@/static/svg/arrow-left-s-fill.svg" width="48rpx" height="48rpx" @tap="goBack" />
-      <u-input v-model="searchVal" placeholder="搜索你想看的视频" placeholderStyle="color: #979797;" @change="searchVideo">
+      <u-input v-model="searchVal" placeholder="搜索你想看的视频" placeholderStyle="color: #fff;" @change="searchVideo">
         <img class="search" slot="prefix" src="@/static/svg/find-replace-fill.svg" />
       </u-input>
       <!-- <img class="right-icon" src="@/static/svg/more-2-fill.svg" /> -->

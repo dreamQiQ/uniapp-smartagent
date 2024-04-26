@@ -4,6 +4,7 @@ module.exports = {
   data() {
     return {
       id: '',
+      uId: '',
       videoId: String(new Date().getTime()),
       videoSrc: '',
       searchVal: '',
@@ -29,11 +30,12 @@ module.exports = {
       return uni.getStorageSync('token')
     }
   },
-  async onLoad({ id }) {
+  async onLoad({ id, uId }) {
     const systeminfo = uni.getSystemInfoSync()
     this.windowHeight = systeminfo.windowHeight
     this.windowWidth = systeminfo.windowWidth
     this.id = id
+    this.uId = uId
     this.videoInit()
     uni.showLoading()
     // 获取视频地址
@@ -48,7 +50,7 @@ module.exports = {
 
     //#ifdef APP-PLUS
     this.$nextTick(() => {
-      this.videoPlay()
+      this.checkVideoPlay()
     })
     //#endif
     uni.hideLoading()
@@ -57,7 +59,7 @@ module.exports = {
     // 获取详情
     async getDetail() {
       this.videoLoad = 1
-      const { result } = await detail(this.id)
+      const { result } = await detail(this.id, { uId: this.uId })
       this.videoDetail = result
       this.videoSrc = result.videoFile[0].url
       this.videoLoad = 2
@@ -105,13 +107,13 @@ module.exports = {
     // 分享视频
     shareVideo() {
       const { id, title } = this.videoDetail
+      const { userId } = this.$store.state.userInfo
       //#ifdef H5
       this.videoUpdate(3)
       //#endif
       //#ifdef APP-PLUS
       uni.shareWithSystem({
-        summary: title,
-        href: `http://123.6.102.119:8053/#/pages/video/player?id=${id}`,
+        href: `http://123.6.102.119:8053/#/pages/video/player?id=${id}&uId=${userId}`,
         success: () => {
           this.videoUpdate(3)
         },

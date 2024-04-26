@@ -43,29 +43,28 @@
       <view :class="{ 'type-item': true, activeType: activeType === 2 }" @tap="activeVideoType(2)">最近更新</view>
     </view>
     <!-- 视频列表 -->
-    <u-list height="calc(100% - 216rpx)" @scrolltolower="scrolltolower" v-if="videoList && videoList.length">
-      <u-list-item v-for="(item, index) in videoList" :key="item.Id" style="margin-bottom: 36rpx">
-        <view class="list-item" @tap="onPlayer(item)">
-          <view class="item-left">
-            <view class="item-img">
-              <u-image :src="getVideoImg(item)" width="200rpx" height="128rpx" radius="14rpx" />
-              <view class="date">{{ item.uploadDate | timeFormat }}</view>
-            </view>
+    <view class="list" v-for="(item, index) in videoList" :key="item.id" style="margin-bottom: 36rpx">
+      <view class="list-item" @tap="onPlayer(item)">
+        <view class="item-left">
+          <view class="item-img">
+            <u-image :src="getVideoImg(item)" loadingIcon="photo-fill" width="200rpx" height="128rpx" radius="14rpx" />
+            <view class="date">{{ item.uploadDate | timeFormat }}</view>
+          </view>
 
-            <view class="item-content">
-              <view class="title">{{ item.title }}</view>
-              <view>{{ item.viewCount || 0 }} 次播放</view>
-              <view>{{ item.forwardCount || 0 }} 次转发</view>
-            </view>
+          <view class="item-content">
+            <view class="title">{{ item.title }}</view>
+            <view>{{ item.viewCount || 0 }} 次播放</view>
+            <view>{{ item.forwardCount || 0 }} 次转发</view>
           </view>
-          <!-- #ifdef APP-PLUS -->
-          <view class="item-right" @tap.stop="shareVideo(item)">
-            <image class="u-img" src="@/static/images/share-box-fill.png"></image>
-          </view>
-          <!-- #endif -->
         </view>
-      </u-list-item>
-    </u-list>
+        <!-- #ifdef APP-PLUS -->
+        <view class="item-right" @tap.stop="shareVideo(item)">
+          <image class="u-img" src="@/static/images/share-box-fill.png"></image>
+        </view>
+        <!-- #endif -->
+      </view>
+    </view>
+
     <view class="emity-data" v-if="!(videoList && videoList.length)">
       <u-image src="@/static/svg/rss-fill.svg" width="180rpx" height="180rpx" />
       <view>暂无搜索结果</view>
@@ -109,9 +108,12 @@ export default {
       this.videoNav.unshift(result.industry)
       this.activeNav = result.industry
     }
+  },
+  onShow() {
     this.init()
   },
   onPullDownRefresh() {
+    console.log('1111111')
     this.init()
   },
   methods: {
@@ -150,14 +152,15 @@ export default {
     async getVideos() {
       try {
         uni.showLoading()
-        const { page, pageSize, activeType, activeNav, activeItem } = this
+        const { activeType, activeNav, activeItem } = this
         const params = {
           primaryType: activeNav,
           secondaryType: activeItem === '全部' ? '' : activeItem,
           sortScene: activeType
         }
-        const { result } = await list(params)
-        this.videoList = result
+        const res = await list(params)
+        this.videoList = res.result || []
+        console.log('🚀 ~ getVideos ~ result:', res.result)
 
         uni.stopPullDownRefresh()
         uni.hideLoading()
@@ -192,9 +195,9 @@ export default {
     },
     // 分享
     shareVideo(item) {
+      const { userId } = this.$store.state.userInfo
       uni.shareWithSystem({
-        summary: item.title,
-        href: `http://123.6.102.119:8053/#/pages/video/player?id=${item.id}`
+        href: `http://123.6.102.119:8053/#/pages/video/player?id=${item.id}&uId=${userId}`
       })
     }
   },
@@ -314,6 +317,11 @@ export default {
         border-radius: 14rpx;
         position: relative;
         margin-right: 22rpx;
+        .video-img {
+          width: 200rpx;
+          height: 128rpx;
+          border-radius: 14rpx;
+        }
         .date {
           position: absolute;
           right: 10rpx;

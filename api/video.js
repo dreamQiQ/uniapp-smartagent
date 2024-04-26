@@ -4,8 +4,8 @@ export async function list(params) {
   return get('/gomk/dcs/smart-agent/video', params)
 }
 
-export async function detail(params) {
-  return get(`/gomk/dcs/smart-agent/video/info/${params}`)
+export async function detail(id, params) {
+  return get(`/gomk/dcs/smart-agent/video/info/${id}`, params)
 }
 
 export async function upload(params) {

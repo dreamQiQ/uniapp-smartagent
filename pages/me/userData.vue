@@ -96,11 +96,9 @@
             <view class="areaCode"> +1 </view>
             <u-input v-model="formData[field]" :placeholder="placeholder" fontSize="32rpx" type="text" :placeholderStyle="placeholderStyle" style="background-color: #f5f7fa" />
           </view>
-
-          <!-- <u--text text="+1" slot="prefix" margin="0 3px 0 0" type="tips"></u--text> -->
         </u-form-item>
         <u-form-item v-else :prop="field">
-          <u-input v-model="formData[field]" :placeholder="placeholder" fontSize="32rpx" type="text" :placeholderStyle="placeholderStyle" style="background-color: #f5f7fa" />
+          <u-input v-model="formData[field]" :placeholder="placeholder" fontSize="32rpx" :maxlength="50" type="text" :placeholderStyle="placeholderStyle" style="background-color: #f5f7fa" />
         </u-form-item>
       </u-form>
     </u-popup>
@@ -171,6 +169,7 @@ export default {
   },
   onShow() {
     this.userInfo = this.$store.state.userInfo
+    this.formData = JSON.parse(JSON.stringify(this.$store.state.userInfo))
     if (!this.userInfo?.userId) this.getUserData()
   },
   // 下拉刷新
@@ -325,6 +324,7 @@ export default {
   }
   .cell-right {
     max-width: 65vw;
+    word-wrap: anywhere;
   }
   .mobile {
     width: 100%;

@@ -24,7 +24,7 @@
     </cover-view>
     <!-- 播放按钮 -->
     <cover-view>
-      <view v-if="showPlayBtn && videoSrc" class="video-play-btn" :style="`left:${(windowWidth / 2 - 50) * 2}rpx;top:${windowHeight / 2 - 50}`">
+      <view v-if="showPlayBtn && videoSrc" class="video-play-btn" :style="`left:${(windowWidth / 2 - 50) * 2}rpx;top:${windowHeight / 2 - 50}`" @tap.stop="checkVideoPlay">
         <u-icon name="play-right-fill" color="rgba(220, 223, 230, 0.56)" size="100px"></u-icon>
       </view>
     </cover-view>

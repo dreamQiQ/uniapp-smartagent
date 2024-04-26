@@ -39,7 +39,7 @@
       </u-form-item>
       <u-picker :show="industryShow" :columns="industryColumns" :closeOnClickOverlay="true" @close="industryShow = false" @cancel="industryShow = false" @confirm="confirm"></u-picker>
     </u-form>
-    <button class="subButton" :class="{ disabledBtn: disabledBtn }" @tap="submit">注册</button>
+    <button class="subButton" :class="{ disabledBtn: disabledBtn }" @tap="submit">提交注册</button>
     <!-- 提示 -->
     <u-notify ref="uNotify"></u-notify>
   </view>
@@ -58,7 +58,7 @@ export default {
         nickName: '',
         mobile: '',
         licenseNumber: '',
-        industry: ''
+        industry: '保险'
       },
       rules: {
         userName: [
