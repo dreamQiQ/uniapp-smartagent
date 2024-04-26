@@ -58,9 +58,11 @@
               <view>{{ item.forwardCount || 0 }} 次转发</view>
             </view>
           </view>
+          <!-- #ifdef APP-PLUS -->
           <view class="item-right" @tap.stop="shareVideo(item)">
             <image class="u-img" src="@/static/images/share-box-fill.png"></image>
           </view>
+          <!-- #endif -->
         </view>
       </u-list-item>
     </u-list>
@@ -192,7 +194,7 @@ export default {
     shareVideo(item) {
       uni.shareWithSystem({
         summary: item.title,
-        href: `http://123.6.102.119:8053/#/pages/video/player?id=${item.id}`,
+        href: `http://123.6.102.119:8053/#/pages/video/player?id=${item.id}`
       })
     }
   },

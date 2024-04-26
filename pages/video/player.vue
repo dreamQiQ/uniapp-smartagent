@@ -46,7 +46,7 @@
         <view class="num">{{ videoDetail.collectCount || 0 }}</view>
       </view>
       <view class="video-icon">
-        <u-image src="@/static/images/share-forward-fill.png" width="60rpx" height="60rpx" @tap="videoUpdate(3)" />
+        <u-image src="@/static/images/share-forward-fill.png" width="60rpx" height="60rpx" @tap="shareVideo" />
         <view class="num">{{ videoDetail.forwardCount || 0 }}</view>
       </view>
     </view>

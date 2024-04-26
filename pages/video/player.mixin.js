@@ -100,9 +100,32 @@ module.exports = {
       this.currentTime = currentTime
       this.progressWidth = (currentTime / duration) * this.windowWidth
     },
+    // 分享视频
+    shareVideo() {
+      const { id, title } = this.videoDetail
+      //#ifdef H5
+      this.videoUpdate(3)
+      //#endif
+      //#ifdef APP-PLUS
+      uni.shareWithSystem({
+        summary: title,
+        href: `http://123.6.102.119:8053/#/pages/video/player?id=${id}`,
+        success: () => {
+          this.videoUpdate(3)
+        },
+        fail: (err) => {
+          console.log('🚀 ~ shareVideo ~ err:', err)
+          uni.showToast({
+            icon: 'error',
+            title: '分享失败'
+          })
+        }
+      })
+      //#endif
+    },
     // 数据记录
     async videoUpdate(type) {
-      const { id, title } = this.videoDetail
+      const { id } = this.videoDetail
 
       const params = {
         id: id,
@@ -118,13 +141,7 @@ module.exports = {
           this.videoDetail.isCollection = !this.videoDetail.isCollection
           break
         case 3:
-          uni.shareWithSystem({
-            summary: title,
-            href: `http://123.6.102.119:8053/#/pages/video/player?id=${id}`,
-            success: () => {
-              this.videoDetail.forwardCount = result
-            }
-          })
+          this.videoDetail.forwardCount = result
           break
       }
     },

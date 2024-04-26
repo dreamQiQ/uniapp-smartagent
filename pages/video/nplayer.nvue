@@ -57,7 +57,7 @@
           <text class="video-tools_video-icon-num">{{ videoDetail.collectCount || 0 }}</text>
         </view>
         <view class="video-tools_video-icon">
-          <u-image class="video-tools-img" src="@/static/images/share-forward-fill.png" @tap="videoUpdate(3)" />
+          <u-image class="video-tools-img" src="@/static/images/share-forward-fill.png" @tap="shareVideo" />
           <text class="video-tools_video-icon-num">{{ videoDetail.forwardCount || 0 }}</text>
         </view>
       </view>
