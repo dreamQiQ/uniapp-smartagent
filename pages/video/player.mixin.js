@@ -37,7 +37,7 @@ module.exports = {
     uni.showLoading()
     // 获取视频地址
     const video = uni.getStorageSync('video')
-    if (!video) {
+    if (video) {
       this.videoDetail = video
       this.videoSrc = video.videoFile[0].url
       this.videoLoad = 2
