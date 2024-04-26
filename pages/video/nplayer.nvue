@@ -68,7 +68,7 @@
 <script>
 import { detail, update } from '@/api/video.js'
 import playerMixin from './player.mixin'
-import color from 'uview-ui/libs/config/color'
+import color from 'uview-ui/libs/config/color'  
 
 export default {
   mixins: [playerMixin],

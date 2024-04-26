@@ -167,7 +167,6 @@ export default {
     // 获取视频封面
     getVideoImg(item) {
       if (item.videoImg && item.videoImg.length) {
-        console.log('🚀 ~ getVideoImg ~ item.videoImg[0].url:', item.videoImg[0].url)
         return item.videoImg[0].url
       }
       return ''

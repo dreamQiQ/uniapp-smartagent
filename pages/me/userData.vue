@@ -206,7 +206,6 @@ export default {
           }
         },
         fail: ({ errMsg }) => {
-          console.log('🚀 ~ uploadAvatar ~ err:', errMsg)
           this.loading = false
           if (errMsg !== 'chooseImage:fail cancel') {
             this.$refs.uNotify.show({
@@ -279,7 +278,10 @@ export default {
           this.closePopup()
         })
         .catch((err) => {
-          console.log('🚀 ~ this.$refs.form.validate ~ err:', err)
+          uni.showToast({
+            icon: 'none',
+            title: err.msg
+          })
         })
     }
   },

@@ -31,7 +31,6 @@ module.exports = {
   async onLoad({ id }) {
     const systeminfo = uni.getSystemInfoSync()
     this.windowHeight = systeminfo.windowHeight
-    console.log('🚀 ~ onLoad ~ this.windowHeight:', this.windowHeight)
     this.windowWidth = systeminfo.windowWidth
     this.id = id
     this.videoInit()
@@ -59,7 +58,6 @@ module.exports = {
       this.videoLoad = 1
       const { result } = await detail(this.id)
       this.videoDetail = result
-      console.log('🚀 ~ getDetail ~ result:', result)
       this.videoSrc = result.videoFile[0].url
       this.videoLoad = 2
     },
@@ -104,7 +102,7 @@ module.exports = {
     },
     // 数据记录
     async videoUpdate(type) {
-      const { id } = this.videoDetail
+      const { id, title } = this.videoDetail
 
       const params = {
         id: id,
@@ -120,7 +118,13 @@ module.exports = {
           this.videoDetail.isCollection = !this.videoDetail.isCollection
           break
         case 3:
-          this.videoDetail.forwardCount = result
+          uni.shareWithSystem({
+            summary: title,
+            href: `http://123.6.102.119:8053/#/pages/video/player?id=${id}`,
+            success: () => {
+              this.videoDetail.forwardCount = result
+            }
+          })
           break
       }
     },
