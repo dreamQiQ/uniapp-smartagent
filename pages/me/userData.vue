@@ -25,7 +25,7 @@
       </u-cell>
       <u-cell title="手机号" :titleStyle="titleStyle" :isLink="true" @tap="openPopup('手机号', 'mobile')">
         <view slot="right-icon" class="cell-right">
-          <view>{{ userInfo.mobile }}</view>
+          <view>+1 {{ userInfo.mobile }}</view>
           <u-icon name="arrow-right" color="#979797" />
         </view>
       </u-cell>
@@ -45,7 +45,7 @@
       </u-cell>
       <u-cell title="公司电话" :titleStyle="titleStyle" :isLink="true" @tap="openPopup('公司电话', 'companyPhone')">
         <view slot="right-icon" class="cell-right">
-          <view>{{ userInfo.companyPhone || '去填写' }}</view>
+          <view>+1 {{ userInfo.companyPhone || '去填写' }}</view>
           <u-icon name="arrow-right" color="#979797" />
         </view>
       </u-cell>

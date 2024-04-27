@@ -24,3 +24,11 @@ export async function update(params) {
 export async function videoType(params) {
   return get(`/gomk/dcs/smart-agent/video-classification/tree`, params)
 }
+
+export async function videoCount() {
+  return get(`/gomk/dcs/smart-agent/video/list-classification-latest`)
+}
+
+export async function videoSearch(params) {
+  return get(`/gomk/dcs/smart-agent/video/search`, params)
+}

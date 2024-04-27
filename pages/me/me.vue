@@ -63,22 +63,22 @@ export default {
   data() {
     return {
       serveList: [
-        {
-          name: '观看历史',
-          img: 'history'
-        },
-        {
-          name: '我的收藏',
-          img: 'collect'
-        },
-        {
-          name: '数据中心',
-          img: 'statistics'
-        },
-        {
-          name: '联系客服',
-          img: 'service'
-        },
+        // {
+        //   name: '观看历史',
+        //   img: 'history'
+        // },
+        // {
+        //   name: '我的收藏',
+        //   img: 'collect'
+        // },
+        // {
+        //   name: '数据中心',
+        //   img: 'statistics'
+        // },
+        // {
+        //   name: '联系客服',
+        //   img: 'service'
+        // },
         {
           name: '我的订单',
           img: 'order'

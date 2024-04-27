@@ -16,6 +16,7 @@
     ></video>
 
     <!-- 播放header -->
+    <view class="nav-header"></view>
     <view class="video-header">
       <u-image v-if="isToken" class="left-icon" src="@/static/svg/arrow-left-s-fill.svg" width="48rpx" height="48rpx" @tap="goBack" />
       <u-input v-model="searchVal" placeholder="搜索你想看的视频" placeholderStyle="color: #fff;" @change="searchVideo">
@@ -50,6 +51,8 @@
         <view class="num">{{ videoDetail.forwardCount || 0 }}</view>
       </view>
     </view>
+    <!-- 提示 -->
+    <u-notify ref="uNotify"></u-notify>
   </view>
 </template>
 
@@ -74,6 +77,14 @@ export default {
       const width = (currentTime / duration) * 100 + '%'
       buffered[0].style.width = width
       buffered[0].style['background-color'] = '#fff'
+    },
+    showError(msg) {
+      this.$refs.uNotify.show({
+        top: '0',
+        type: 'error',
+        message: msg,
+        safeAreaInsetTop: true
+      })
     }
   }
 }

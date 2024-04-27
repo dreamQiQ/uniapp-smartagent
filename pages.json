@@ -7,7 +7,7 @@
 			"path": "pages/video/home",
 			"style": {
 				"navigationBarTitleText": "首页",
-				"enablePullDownRefresh": true
+				"enablePullDownRefresh": false
 			}
 		},
 		{
@@ -70,14 +70,27 @@
 			"path": "pages/video/player",
 			"style": {
 				"navigationBarTitleText": "视频",
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom",
+				"titleNView": false
+			}
+		},
+		{
+			"path": "pages/video/search",
+			"style": {
+				"navigationBarTitleText": "搜索",
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom",
+				"titleNView": false
 			}
 		},
 		{
 			"path": "pages/video/nplayer",
 			"style": {
 				"navigationBarTitleText": "",
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom",
+				"titleNView": false
 			}
 		},
 		{
@@ -119,18 +132,18 @@
 				"selectedIconPath": "static/images/video_a.png",
 				"text": "视频"
 			},
-			{
-				"pagePath": "pages/index/index",
-				"iconPath": "static/images/poster.png",
-				"selectedIconPath": "static/images/poster_a.png",
-				"text": "海报"
-			},
-			{
-				"pagePath": "pages/video/recommend",
-				"iconPath": "static/images/recom.png",
-				"selectedIconPath": "static/images/recom_a.png",
-				"text": "推荐"
-			},
+			// {
+			// 	"pagePath": "pages/index/index",
+			// 	"iconPath": "static/images/poster.png",
+			// 	"selectedIconPath": "static/images/poster_a.png",
+			// 	"text": "海报"
+			// },
+			// {
+			// 	"pagePath": "pages/video/recommend",
+			// 	"iconPath": "static/images/recom.png",
+			// 	"selectedIconPath": "static/images/recom_a.png",
+			// 	"text": "推荐"
+			// },
 			{
 				"pagePath": "pages/me/me",
 				"iconPath": "static/images/user.png",

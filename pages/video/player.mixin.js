@@ -67,9 +67,7 @@ module.exports = {
     },
     // 返回
     goBack() {
-      uni.switchTab({
-        url: '/pages/video/list'
-      })
+      uni.navigateBack({ data: 1 })
     },
     // 视频播放暂停
     async checkVideoPlay() {
@@ -93,10 +91,7 @@ module.exports = {
     // 播放失败
     videoErrorCallback(error) {
       if (!this.videoLoad) {
-        uni.showToast({
-          icon: 'error',
-          title: '视频加载失败'
-        })
+        this.showError('视频加载失败')
       }
     },
     // 播放进度
@@ -107,7 +102,7 @@ module.exports = {
     },
     // 分享视频
     shareVideo() {
-      const { id, title } = this.videoDetail
+      const { id } = this.videoDetail
       const { userId } = this.$store.state.userInfo
       //#ifdef H5
       this.videoUpdate(3)
@@ -119,36 +114,41 @@ module.exports = {
           this.videoUpdate(3)
         },
         fail: (err) => {
-          console.log('🚀 ~ shareVideo ~ err:', err)
-          uni.showToast({
-            icon: 'error',
-            title: '分享失败'
-          })
+          this.showError('分享失败')
         }
       })
       //#endif
     },
     // 数据记录
     async videoUpdate(type) {
-      const { id } = this.videoDetail
-
-      let params = {
-        id: id,
-        type
-      }
-      if (type === 3) params.shareUserId = this.$store.state.userInfo.userId
-      const { result } = await update(params)
-      switch (type) {
-        case 1:
-          this.videoDetail.viewCount = result
-          break
-        case 2:
-          this.videoDetail.collectCount = result
-          this.videoDetail.isCollection = !this.videoDetail.isCollection
-          break
-        case 3:
-          this.videoDetail.forwardCount = result
-          break
+      try {
+        const { id } = this.videoDetail
+        let params = {
+          id: id,
+          type
+        }
+        //#ifdef H5
+        params.platform = 'h5'
+        //#endif
+        //#ifdef APP-PLUS
+        params.platform = 'app'
+        //#endif
+        if (type === 3) params.shareUserId = this.$store.state.userInfo.userId
+        const { result } = await update(params)
+        switch (type) {
+          case 1:
+            this.videoDetail.viewCount = result
+            break
+          case 2:
+            this.videoDetail.collectCount = result
+            this.videoDetail.isCollection = !this.videoDetail.isCollection
+            break
+          case 3:
+            this.videoDetail.forwardCount = result
+            break
+        }
+      } catch (error) {
+        this.showError(error.message)
       }
     },
     searchVideo() {}
