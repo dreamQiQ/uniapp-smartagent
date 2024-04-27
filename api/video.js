@@ -32,3 +32,7 @@ export async function videoCount() {
 export async function videoSearch(params) {
   return get(`/gomk/dcs/smart-agent/video/search`, params)
 }
+
+export async function videoHotTag() {
+  return get(`/gomk/dcs/smart-agent/video/list-hot-label`)
+}

@@ -28,7 +28,7 @@
           <view> 热门搜索 </view>
         </view>
         <view class="history-list">
-          <view class="item" v-for="(item, index) in hotSearch" :key="index" @tap="historySearch(item)">{{ item }}</view>
+          <view class="item" v-for="(item, index) in hotSearch" :key="index" @tap="historySearch(`#${item.labelName}`)">{{ item.labelName }}</view>
         </view>
       </view>
     </view>
@@ -43,7 +43,7 @@
   </view>
 </template>
 <script>
-import { videoSearch } from '@/api/video.js'
+import { videoHotTag, videoSearch } from '@/api/video.js'
 import videoList from '@/pages/components/videoList.vue'
 
 export default {
@@ -63,6 +63,9 @@ export default {
       searchType: 0,
       showList: false
     }
+  },
+  onLoad() {
+    this.getVideoHotTag()
   },
   onShow() {
     this.searchHistory = uni.getStorageSync('search-history')
@@ -84,6 +87,10 @@ export default {
       } else {
         uni.navigateBack({ data: 1 })
       }
+    },
+    async getVideoHotTag() {
+      const { result } = await videoHotTag()
+      this.hotSearch = result || []
     },
     // 历史记录
     historySearch(item) {

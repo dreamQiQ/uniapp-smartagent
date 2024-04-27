@@ -79,7 +79,7 @@ export default {
   },
   async onLoad() {
     await this.getVideoType()
-    const { industry } = this.$store.state.unserInfo
+    const industry = this.$store.state.unserInfo?.industry || ''
 
     if (industry) {
       const index = this.videoNav.findIndex((item) => item.classificationName === result.industry)
