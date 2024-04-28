@@ -35,7 +35,7 @@
     <cover-view>
       <view class="video-info" :style="`width:${windowWidth * 0.85 * 2}rpx;`">
         <text class="video-info-title">{{ videoDetail.title }}</text>
-        <view class="video-info-desc" v-if="videoDetail.labelList.length">
+        <view class="video-info-desc" v-if="videoDetail.labelList && videoDetail.labelList.length">
           <view class="video-info-desc-desc">
             <text class="video-info-desc-text" style="margin-right: 16rpx" v-for="i in labelList" :key="i" @click="toSearch(i)">{{ i }}</text>
           </view>

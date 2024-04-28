@@ -35,7 +35,7 @@
     <!-- 视频信息 -->
     <view class="video-info">
       <view class="video-title">{{ videoDetail.title }}</view>
-      <view class="video-desc" v-show="videoDetail.labelList.length">
+      <view class="video-desc" v-show="videoDetail.labelList && videoDetail.labelList.length">
         <view class="desc" :class="{ unfold: descUnfold }">
           <text style="margin-right: 16rpx" v-for="i in labelList" :key="i" @click="toSearch(i)">{{ i }}</text>
         </view>

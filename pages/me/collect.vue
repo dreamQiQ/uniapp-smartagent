@@ -1,5 +1,6 @@
 <template>
   <view class="history">
+    <view class="nav-header"></view>
     <view class="history-header">
       <u-image src="@/static/images/wihte-to-back.png" width="24rpx" height="24rpx" @tap="goBack" />
       <view class="page-title">{{ pageTitle }}</view>
@@ -75,11 +76,21 @@ export default {
         const res = await deleteCollect({ ids: ids.join(',') })
         await this.getWatchRecord()
         callback()
-        this.$refs.uNotify.success('删除成功')
+        this.$refs.uNotify.show({
+          top: 0,
+          type: 'success',
+          message: '删除成功',
+          safeAreaInsetTop: true
+        })
         uni.hideLoading()
       } catch (error) {
         uni.hideLoading()
-        this.$refs.uNotify.error('删除成功')
+        this.$refs.uNotify.show({
+          top: 0,
+          type: 'error',
+          message: '删除失败',
+          safeAreaInsetTop: true
+        })
       }
     }
   }

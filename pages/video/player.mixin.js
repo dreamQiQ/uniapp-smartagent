@@ -35,6 +35,7 @@ module.exports = {
     labelList() {
       const { descUnfold } = this
       const { labelList } = this.videoDetail
+      if (!labelList) return []
       let data = []
       //#ifdef H5
       data = labelList.map((i) => `#${i.labelName}`)
