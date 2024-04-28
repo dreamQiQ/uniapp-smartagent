@@ -223,9 +223,8 @@ module.exports = {
       v = v.replace('...', '')
       v = v.replace('#', '')
       const tag = this.videoDetail.labelList.find((i) => i.labelName.includes(v))
-      if (tag) data = `#${tag.labelName}`
+      if (tag) data = tag.labelName
 
-      console.log('🚀 ~ toSearch ~ data:', data)
       const token = uni.getStorageSync('token')
       if (token) {
         uni.navigateTo({ url: `/pages/video/search?val=${data}` })

@@ -28,7 +28,7 @@
           <view> 热门搜索 </view>
         </view>
         <view class="history-list">
-          <view class="item" v-for="(item, index) in hotSearch" :key="index" @tap="historySearch(`#${item.labelName}`)">{{ item.labelName }}</view>
+          <view class="item" v-for="(item, index) in hotSearch" :key="index" @tap="historySearch(item.labelName)">{{ item.labelName }}</view>
         </view>
       </view>
     </view>
@@ -66,7 +66,6 @@ export default {
   },
   onLoad(options) {
     this.search = options.val
-    console.log('🚀 ~ onLoad ~ options:', options)
     this.getVideoHotTag()
   },
   onShow() {
