@@ -25,7 +25,7 @@ export default {
   components: {}
 }
 </script>
-<style lang="scss" scoped>
+<style>
 .search-input {
   width: 100%;
   height: 80rpx;
@@ -34,10 +34,10 @@ export default {
   display: flex;
   align-items: center;
   padding: 16rpx 24rpx;
-  .placeholder {
-    color: #929292;
-    font-size: 26rpx;
-    margin-left: 10rpx;
-  }
+}
+.search-input .placeholder {
+  color: #929292;
+  font-size: 26rpx;
+  margin-left: 10rpx;
 }
 </style>

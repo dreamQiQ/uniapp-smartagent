@@ -1,4 +1,4 @@
-import { get, post, requestUpload, patch, put } from '@/common/utils/request'
+import { get, post, requestUpload, patch, put, deleted } from '@/common/utils/request'
 
 // 获取VIP套餐
 export async function getVipList(params) {
@@ -23,4 +23,22 @@ export async function editUserInfo(params) {
 // 上传头像
 export async function uploadAvatar(params) {
   return post('/gomk/system/common/file/upload/avatar', params)
+}
+
+// 查询观看记录
+export async function videoRecord() {
+  return get('/gomk/dcs/smart-agent/video-record/play-record')
+}
+// 删除观看记录
+export async function deleteRecord(params) {
+  return deleted ('/gomk/dcs/smart-agent/video-record/play-record', params)
+}
+
+// 查询收藏记录
+export async function collectRecord() {
+  return get(`/gomk/dcs/smart-agent/video-record/collection`)
+}
+// 删除收藏记录
+export async function deleteCollect(params) {
+  return deleted ('/gomk/dcs/smart-agent/video-record/collection', params)
 }

@@ -63,14 +63,14 @@ export default {
   data() {
     return {
       serveList: [
-        // {
-        //   name: '观看历史',
-        //   img: 'history'
-        // },
-        // {
-        //   name: '我的收藏',
-        //   img: 'collect'
-        // },
+        {
+          name: '观看历史',
+          img: 'history'
+        },
+        {
+          name: '我的收藏',
+          img: 'collect'
+        },
         // {
         //   name: '数据中心',
         //   img: 'statistics'
@@ -129,11 +129,7 @@ export default {
     },
     // 跳转服务
     handleServe(item) {
-      switch (item.img) {
-        case 'order':
-          uni.navigateTo({ url: `/pages/me/${item.img}` })
-          break
-      }
+      uni.navigateTo({ url: `/pages/me/${item.img}?name=${item.name}` })
     },
     // 个人资料
     toUserData() {

@@ -65,6 +65,9 @@ export default {
       return !(this.formData.username && this.formData.password)
     }
   },
+  onHide() {
+    uni.hideLoading()
+  },
   methods: {
     submit() {
       if (this.disabledBtn) return

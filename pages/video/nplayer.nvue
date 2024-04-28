@@ -19,7 +19,10 @@
       <!-- <view class="nav-header"></view> -->
       <view class="video-header" :style="`width:${windowWidth * 2}rpx;`">
         <u-icon v-if="isToken" class="left-icon" name="arrow-left" size="48rpx" color="#D8D8D8" @tap="goBack"></u-icon>
-        <u-input class="video-header-input" v-model="searchVal" placeholder="搜索你想看的视频" placeholderStyle="color: #979797;" @change="searchVideo"></u-input>
+        <view v-if="isToken" class="search-input" @tap.stop="toSearch">
+          <u-icon name="search" size="48rpx" color="#929292"></u-icon>
+          <text class="search-placeholder"> 搜索你想看的视频 </text>
+        </view>
       </view>
     </cover-view>
     <!-- 播放按钮 -->
@@ -32,8 +35,10 @@
     <cover-view>
       <view class="video-info" :style="`width:${windowWidth * 0.85 * 2}rpx;`">
         <text class="video-info-title">{{ videoDetail.title }}</text>
-        <view class="video-info-desc" v-if="videoDetail.desc">
-          <text class="video-info-desc-desc">{{ descUnfold ? videoDetail.desc : videoDetail.desc.slice(0, 21) + '...' }}</text>
+        <view class="video-info-desc" v-if="videoDetail.labelList.length">
+          <view class="video-info-desc-desc">
+            <text class="video-info-desc-text" style="margin-right: 16rpx" v-for="i in labelList" :key="i" @click="toSearch(i)">{{ i }}</text>
+          </view>
           <text class="descBtn" @tap="descUnfold = !descUnfold">{{ descUnfold ? '收起' : '展开' }}</text>
         </view>
       </view>
@@ -57,9 +62,16 @@
           <text class="video-tools_video-icon-num">{{ videoDetail.collectCount || 0 }}</text>
         </view>
         <view class="video-tools_video-icon">
-          <u-image class="video-tools-img" src="@/static/images/share-forward-fill.png" @tap="shareVideo" />
+          <u-image class="video-tools-img" src="@/static/images/share-forward-fill.png" @tap.stop="shareVideo" />
           <text class="video-tools_video-icon-num">{{ videoDetail.forwardCount || 0 }}</text>
         </view>
+      </view>
+    </cover-view>
+    <cover-view>
+      <!-- 分享提示 -->
+      <view class="share-msg" v-if="showModal">
+        <text class="share-msg-text"> 当前功能为会员专属功能 </text>
+        <text class="share-msg-text share-msg-link" @tap="toVipPage"> 了解更多会员福利 </text>
       </view>
     </cover-view>
     <cover-view>
@@ -76,7 +88,6 @@ import color from 'uview-ui/libs/config/color'
 
 export default {
   mixins: [playerMixin],
-
   methods: {
     // 视频初始化
     videoInit() {
@@ -88,14 +99,14 @@ export default {
       this.currentTime = currentTime
       this.progressWidth = (currentTime / duration) * this.windowWidth
     },
-    showError(msg) {
+    showMessage(msg, type) {
       this.$refs.uNotify.show({
         top: 0,
-        type: 'error',
+        type: type,
         message: msg,
         safeAreaInsetTop: true
       })
-    }
+    },
   }
 }
 </script>
@@ -138,13 +149,19 @@ export default {
   opacity: 0.5;
 }
 
-.video-header-input {
+.search-input {
   flex: 1;
-  height: 68rpx;
+  height: 80rpx;
   border-radius: 12rpx;
   background: rgba(216, 216, 216, 0.5);
-  padding: 5px;
-  font-size: 14px;
+  flex-direction: row;
+  align-items: center;
+  padding: 16rpx 24rpx;
+}
+.search-placeholder {
+  color: #929292;
+  font-size: 26rpx;
+  margin-left: 10rpx;
 }
 
 .video-info {
@@ -175,18 +192,24 @@ export default {
 }
 
 .video-info-desc-desc {
-  width: 550rpx;
+  width: 500rpx;
   height: auto;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.video-info-desc-text {
   color: #fff;
   padding: 0px;
   font-size: 24rpx;
+  margin-right: 16rpx;
+  margin-bottom: 6rpx;
 }
 
 .descBtn {
   color: #fff;
-  width: 60rpx;
+  width: 78rpx;
+  min-width: 78rpx;
   text-align: left;
-  min-width: 72rpx;
   margin-left: 6rpx;
   font-size: 28rpx;
   overflow: visible;
@@ -231,5 +254,27 @@ export default {
 .video-progress2 {
   height: 8rpx;
   background-color: #fff;
+}
+.share-msg {
+  position: fixed;
+  width: 700rpx;
+  height: 94rpx;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  bottom: 14rpx;
+  left: 28rpx;
+  border-radius: 20rpx;
+  background-color: #fff;
+  padding: 26rpx 40rpx;
+}
+.share-msg-text {
+  color: #9e9e9e;
+  font-size: 28rpx;
+  font-weight: bold;
+}
+.share-msg-link {
+  color: #f0a105;
+  text-decoration: underline;
 }
 </style>

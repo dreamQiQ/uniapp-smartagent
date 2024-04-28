@@ -172,6 +172,9 @@ export default {
     this.formData = JSON.parse(JSON.stringify(this.$store.state.userInfo))
     if (!this.userInfo?.userId) this.getUserData()
   },
+  onHide() {
+    uni.hideLoading()
+  },
   // 下拉刷新
   async onPullDownRefresh() {
     await this.getUserData()

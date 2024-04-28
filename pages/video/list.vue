@@ -38,13 +38,13 @@
       </view>
     </scroll-view>
 
-    <view class="type-list">
+    <view class="type-list" v-if="videoNav.length">
       <view :class="{ 'type-item': true, activeType: activeType === 1 }" @tap="activeVideoType(1)">热门视频</view>
       <view :class="{ 'type-item': true, activeType: activeType === 2 }" @tap="activeVideoType(2)">最近更新</view>
     </view>
     <!-- 视频列表 -->
     <view style="width: 100%; height: calc(100% - 240rpx)">
-      <video-list :list="videoList"></video-list>
+      <video-list ref="videoList" :list="videoList"></video-list>
     </view>
     <!-- 提示 -->
     <u-notify ref="uNotify"></u-notify>
@@ -82,22 +82,26 @@ export default {
     const industry = this.$store.state.unserInfo?.industry || ''
 
     if (industry) {
-      const index = this.videoNav.findIndex((item) => item.classificationName === result.industry)
+      // const index = this.videoNav.findIndex((item) => item.classificationName === result.industry)
       const data = this.videoNav.find((item) => item.classificationName === result.industry)
-      this.videoNav.splice(index, 1)
-      this.videoNav.unshift(data)
+      // this.videoNav.splice(index, 1)
+      // this.videoNav.unshift(data)
       this.activeNav = data.id
     } else {
       this.activeNav = this.videoNav[0].id
     }
-    const videoType = uni.getStorageSync('video_type')
-    if (videoType) this.activeNav = videoType
-    this.init()
   },
   onShow() {
+    this.$nextTick(() => {
+      this.$refs.videoList.$refs.vipMsg.close()
+    })
+    const videoType = uni.getStorageSync('video_type')
+    if (videoType) this.activeNav = videoType
+
     this.init()
   },
   onHide() {
+    uni.hideLoading()
     uni.removeStorageSync('video_type')
   },
   onPullDownRefresh() {

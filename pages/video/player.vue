@@ -19,9 +19,13 @@
     <view class="nav-header"></view>
     <view class="video-header">
       <u-image v-if="isToken" class="left-icon" src="@/static/svg/arrow-left-s-fill.svg" width="48rpx" height="48rpx" @tap="goBack" />
-      <u-input v-model="searchVal" placeholder="搜索你想看的视频" placeholderStyle="color: #fff;" @change="searchVideo">
+      <view v-if="isToken" class="search-input" @tap.stop="toSearch">
+        <u-icon name="search" size="48rpx" color="#929292"></u-icon>
+        <text class="search-placeholder"> 搜索你想看的视频 </text>
+      </view>
+      <!-- <u-input v-model="searchVal" placeholder="搜索你想看的视频" placeholderStyle="color: #fff;" @change="searchVideo">
         <img class="search" slot="prefix" src="@/static/svg/find-replace-fill.svg" />
-      </u-input>
+      </u-input> -->
       <!-- <img class="right-icon" src="@/static/svg/more-2-fill.svg" /> -->
     </view>
     <!-- 播放按钮 -->
@@ -31,13 +35,15 @@
     <!-- 视频信息 -->
     <view class="video-info">
       <view class="video-title">{{ videoDetail.title }}</view>
-      <view class="video-desc" v-show="videoDetail.desc">
-        <view class="desc" :class="{ unfold: descUnfold }">{{ videoDetail.desc }}</view>
+      <view class="video-desc" v-show="videoDetail.labelList.length">
+        <view class="desc" :class="{ unfold: descUnfold }">
+          <text style="margin-right: 16rpx" v-for="i in labelList" :key="i" @click="toSearch(i)">{{ i }}</text>
+        </view>
         <view class="descBtn" @tap="descUnfold = !descUnfold">{{ descUnfold ? '收起' : '展开' }}</view>
       </view>
     </view>
     <!-- 工作栏 -->
-    <view class="video-tools">
+    <view class="video-tools" v-if="isToken">
       <view class="video-icon">
         <u-image src="@/static/images/play-list-2-fill.png" width="60rpx" height="60rpx" />
         <view class="num">{{ videoDetail.viewCount || 0 }}</view>
@@ -51,6 +57,8 @@
         <view class="num">{{ videoDetail.forwardCount || 0 }}</view>
       </view>
     </view>
+    <!-- vip提示 -->
+    <shareVipMesModal ref="vipMsgRef"></shareVipMesModal>
     <!-- 提示 -->
     <u-notify ref="uNotify"></u-notify>
   </view>
@@ -78,10 +86,10 @@ export default {
       buffered[0].style.width = width
       buffered[0].style['background-color'] = '#fff'
     },
-    showError(msg) {
+    showMessage(msg, type) {
       this.$refs.uNotify.show({
         top: '0',
-        type: 'error',
+        type: type,
         message: msg,
         safeAreaInsetTop: true
       })
@@ -121,12 +129,19 @@ export default {
       height: 48rpx;
       margin-left: 24rpx;
     }
-    .u-input {
+    .search-input {
       flex: 1;
+      height: 80rpx;
+      border-radius: 12rpx;
       background: rgba(216, 216, 216, 0.5);
+      display: flex;
+      align-items: center;
+      padding: 16rpx 24rpx;
     }
-    .search {
-      opacity: 0.5;
+    .search-placeholder {
+      color: #929292;
+      font-size: 26rpx;
+      margin-left: 10rpx;
     }
   }
 

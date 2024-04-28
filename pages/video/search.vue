@@ -64,23 +64,33 @@ export default {
       showList: false
     }
   },
-  onLoad() {
+  onLoad(options) {
+    this.search = options.val
+    console.log('🚀 ~ onLoad ~ options:', options)
     this.getVideoHotTag()
   },
   onShow() {
     this.searchHistory = uni.getStorageSync('search-history')
     if (!this.searchHistory) this.searchHistory = []
+    if (this.videoList.length) this.getVideoList()
+  },
+  onHide() {
+    uni.hideLoading()
   },
   watch: {
-    search() {
-      if (!this.search) this.showList = Boolean(this.search)
+    search(v) {
+      if (!v) {
+        this.showList = Boolean(v)
+      } else {
+        this.onSearch(v)
+      }
     }
   },
   methods: {
     // 返回上一页
     toBack() {
-      const { videoList } = this
-      if (videoList.length) {
+      const { showList } = this
+      if (showList) {
         this.search = ''
         this.videoList = []
         this.showList = false
@@ -173,7 +183,7 @@ export default {
     .history-list {
       width: 100%;
       height: auto;
-      max-height: 240rpx;
+      max-height: 215rpx;
       overflow: hidden;
       display: flex;
       gap: 30rpx 20rpx;

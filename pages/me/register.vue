@@ -123,6 +123,9 @@ export default {
   onReady() {
     this.$refs.form.setRules(this.rules)
   },
+  onHide() {
+    uni.hideLoading()
+  },
   methods: {
     submit() {
       if (this.disabledBtn) return

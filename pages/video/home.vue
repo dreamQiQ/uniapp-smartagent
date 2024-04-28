@@ -12,7 +12,7 @@
         <view class="card-more" @click="toVideoList(item.id)"> 更多</view>
       </view>
       <view class="card-list">
-        <view class="card-item" v-for="v in item.videoVOList" :key="v.id" @click="toVideoDetail(v.id)">
+        <view class="card-item" v-for="v in item.videoVOList" :key="v.id" @click="toVideoDetail(v)">
           <view class="item-img">
             <u-image :src="v.videoImg[0].url" width="100%" height="200rpx" mode="aspectFill" />
           </view>
@@ -44,19 +44,19 @@ export default {
     },
     // 跳转视频列表
     toVideoList(id) {
-      console.log('🚀 ~ toVideoList ~ id:', id)
       uni.setStorageSync('video_type', id)
       uni.switchTab({
         url: `/pages/video/list`
       })
     },
     // 跳转视频详情
-    toVideoDetail(id) {
+    toVideoDetail(item) {
+      uni.setStorageSync('video', item)
       //#ifdef H5
-      uni.navigateTo({ url: `/pages/video/player?id=${id}` })
+      uni.navigateTo({ url: `/pages/video/player?id=${item.id}` })
       //#endif
       //#ifdef APP-PLUS
-      uni.navigateTo({ url: `/pages/video/nplayer?id=${id}` })
+      uni.navigateTo({ url: `/pages/video/nplayer?id=${item.id}` })
       //#endif
     },
     // 跳转推荐

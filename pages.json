@@ -53,6 +53,24 @@
 			}
 		},
 		{
+			"path": "pages/me/history",
+			"style": {
+				"navigationBarTitleText": "观看历史",
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom",
+				"titleNView": false
+			}
+		},
+		{
+			"path": "pages/me/collect",
+			"style": {
+				"navigationBarTitleText": "我的收藏",
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom",
+				"titleNView": false
+			}
+		},
+		{
 			"path": "pages/me/order",
 			"style": {
 				"navigationBarTitleText": "我的订单",

@@ -180,8 +180,6 @@ class Request {
 		}
 
 		return new Promise((resolve, reject) => {
-			console.log(this.baseUrl + url)
-			console.log(file)
 			uni.uploadFile({
 				url: this.baseUrl + url,
 				header: tempHeader,
@@ -233,6 +231,10 @@ class Request {
 		return this.request(url, "PUT", data, header)
 	}
 
+	deleted = (url, data, header) => {
+		return this.request(url, "DELETE", data, header)
+	}
+
 	patch = (url, data, header) => {
 		const _params = {
 			...data,
@@ -242,11 +244,12 @@ class Request {
 	}
 }
 
-const instance = new Request("") //测试
+const instance = new Request("")
 const get = instance.get
 const post = instance.post
 const put = instance.put
 const patch = instance.patch
+const deleted = instance.deleted
 const requestUpload = instance.requestUpload
 
 export default instance
@@ -255,5 +258,6 @@ export {
 	post,
 	put,
 	patch,
+	deleted,
 	requestUpload
 }
