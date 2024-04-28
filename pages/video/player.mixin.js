@@ -76,8 +76,6 @@ module.exports = {
       await this.getDetail()
     }
 
-    console.log('🚀 ~ onLoad ~ this.videoDetail:', this.videoDetail)
-
     //#ifdef APP-PLUS
     this.$nextTick(() => {
       this.checkVideoPlay()
@@ -110,13 +108,13 @@ module.exports = {
     // 视频播放暂停
     async checkVideoPlay() {
       const { isPlay } = this
+      this.isPlay = !isPlay
       if (isPlay) {
         this.$refs.videoRef.pause()
       } else {
         this.$refs.videoRef.play()
         if (this.isToken) await this.videoUpdate(1)
       }
-      this.isPlay = !isPlay
     },
     // 开始播放
     onPlay() {
@@ -171,7 +169,8 @@ module.exports = {
     // 数据记录
     async videoUpdate(type) {
       try {
-        const { userId, isVip } = this.$store.state.userInfo
+        const { uId } = this
+        const { isVip } = this.$store.state.userInfo
         const { id, videoPermission } = this.videoDetail
         console.log('🚀 ~ videoUpdate ~ videoPermission:', videoPermission, isVip)
         let params = {
@@ -180,12 +179,15 @@ module.exports = {
         }
         //#ifdef H5
         params.platform = 'h5'
-        this.$refs.vipMsgRef.show()
+        if (type === 2 && videoPermission === 2 && !isVip) {
+          this.$refs.vipMsgRef.show()
+          return false
+        }
+        if (uId) params.shareUserId = uId
         //#endif
         //#ifdef APP-PLUS
         params.platform = 'app'
         if (type === 2 && videoPermission === 2 && !isVip) {
-          debugger
           this.showModal = true
           setInterval(() => {
             this.showModal = false

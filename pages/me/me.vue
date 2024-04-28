@@ -27,15 +27,15 @@
       </view>
       <view class="user-content">
         <view>
-          <view class="number">8</view>
+          <view class="number">{{ videoNum.today || 0 }}</view>
           <view class="label">今日浏览</view>
         </view>
         <view>
-          <view class="number">680</view>
+          <view class="number">{{ videoNum.sevenDay || 0 }}</view>
           <view class="label">近7日浏览</view>
         </view>
         <view>
-          <view class="number">3648</view>
+          <view class="number">{{ videoNum.thirtyDay || 0 }}</view>
           <view class="label">近30日浏览</view>
         </view>
       </view>
@@ -57,6 +57,7 @@
 
 <script>
 import dayjs from 'dayjs'
+import { videoViewNum } from '@/api/me.js'
 import defaultAvatar from '@/static/images/defaultAvatar.png'
 
 export default {
@@ -84,7 +85,8 @@ export default {
           img: 'order'
         }
       ],
-      checkNotice: true
+      checkNotice: true,
+      videoNum: {}
     }
   },
   computed: {
@@ -112,6 +114,7 @@ export default {
   onShow() {
     const { companyName, companyPosition } = this.userInfo
     this.checkNotice = !(companyName && companyPosition)
+    this.getVideoViewNum()
   },
   // 下拉刷新
   onPullDownRefresh() {
@@ -119,6 +122,11 @@ export default {
     uni.stopPullDownRefresh()
   },
   methods: {
+    async getVideoViewNum() {
+      const { result } = await videoViewNum()
+      console.log('🚀 ~ getVideoViewNum ~ res:', result)
+      this.videoNum = result
+    },
     // 跳转vip
     toVipPage() {
       if (this.userInfo.isVip) {

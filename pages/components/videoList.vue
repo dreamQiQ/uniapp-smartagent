@@ -113,7 +113,7 @@ export default {
     },
     // 分享
     shareVideo(item) {
-      const { isVip } = this
+      const { isVip, videoId } = this
 
       if (item.videoPermission === 2 && !isVip) {
         this.$refs.vipMsg.show()

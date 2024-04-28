@@ -31,7 +31,7 @@ export async function videoRecord() {
 }
 // 删除观看记录
 export async function deleteRecord(params) {
-  return deleted ('/gomk/dcs/smart-agent/video-record/play-record', params)
+  return deleted('/gomk/dcs/smart-agent/video-record/play-record', params)
 }
 
 // 查询收藏记录
@@ -40,5 +40,9 @@ export async function collectRecord() {
 }
 // 删除收藏记录
 export async function deleteCollect(params) {
-  return deleted ('/gomk/dcs/smart-agent/video-record/collection', params)
+  return deleted('/gomk/dcs/smart-agent/video-record/collection', params)
+}
+// 获取浏览量
+export async function videoViewNum() {
+  return get('/gomk/dcs/smart-agent/video-record/share-video-record')
 }
