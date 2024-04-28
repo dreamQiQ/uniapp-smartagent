@@ -275,10 +275,11 @@ export default {
     // 编辑用户信息
     async editUserData() {
       const { formData, field } = this
+
       this.$refs.form
         .validate()
         .then(async () => {
-          await editUserInfo({ [field]: formData[field] })
+          await editUserInfo(formData)
           this.$store.dispatch('getUserInfo')
           this.getUserData()
           this.closePopup()
