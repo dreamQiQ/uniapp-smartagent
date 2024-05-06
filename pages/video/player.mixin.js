@@ -139,7 +139,8 @@ module.exports = {
     },
     // 分享视频
     shareVideo() {
-      const { id, videoPermission } = this.videoDetail
+      const { id } = this
+      const { videoPermission } = this.videoDetail
       const { userId, isVip } = this.$store.state.userInfo
       //#ifdef H5
       if (videoPermission === 2 && !isVip) {
@@ -170,9 +171,9 @@ module.exports = {
     // 数据记录
     async videoUpdate(type) {
       try {
-        const { uId } = this
+        const { id, uId } = this
         const { isVip } = this.$store.state.userInfo
-        const { id, videoPermission } = this.videoDetail
+        const { videoPermission } = this.videoDetail
         console.log('🚀 ~ videoUpdate ~ videoPermission:', videoPermission, isVip)
         let params = {
           id: id,

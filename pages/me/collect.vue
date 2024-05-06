@@ -13,7 +13,7 @@
       <view :class="{ active: searchType === 0 }" @click="checkSearchType(0)"> 视频 </view>
       <!-- <view :class="{ active: searchType === 1 }" @click="checkSearchType(1)"> 推荐 </view> -->
     </view>
-    <video-list ref="videoList" class="video-list" :list="videoList" :showCheckbox="editStatus" closeBtnName="取消收藏" @closeEdit="closeEdit"></video-list>
+    <video-list ref="videoList" class="video-list" :list="videoList" :showCheckbox="editStatus" videoId="videoId" closeBtnName="取消收藏" @closeEdit="closeEdit"></video-list>
     <!-- 提示 -->
     <u-notify ref="uNotify"></u-notify>
   </view>
