@@ -52,6 +52,8 @@
     </view>
 
     <view class="logout" @tap="logout"> 退出登录 </view>
+    <!-- 分享提示 -->
+    <shareVipMesModal ref="vipMsg" />
   </view>
 </template>
 
@@ -59,6 +61,7 @@
 import dayjs from 'dayjs'
 import { videoViewNum } from '@/api/me.js'
 import defaultAvatar from '@/static/images/defaultAvatar.png'
+import shareVipMesModal from '@/pages/components/shareVipMesModal.vue'
 
 export default {
   data() {
@@ -129,6 +132,12 @@ export default {
     },
     // 跳转服务
     handleServe(item) {
+      const { isVip } = this.userInfo
+      const checkVip = ['history', 'collect', 'statistics']
+      if (!isVip && checkVip.includes(item.img)) {
+        this.$refs.vipMsg.show()
+        return false
+      }
       uni.navigateTo({ url: `/pages/me/${item.img}?name=${item.name}` })
     },
     // 个人资料
@@ -140,8 +149,9 @@ export default {
       uni.setStorageSync('token', '')
       uni.setStorageSync('user_id', '')
       uni.reLaunch({ url: '/pages/me/login' })
-    },
-  }
+    }
+  },
+  components: { shareVipMesModal }
 }
 </script>
 
