@@ -93,8 +93,10 @@ export default {
   methods: {
     // 获取视频封面
     getVideoImg(item) {
-      if (item.videoImg && item.videoImg.length) {
-        return item.videoImg[0].url
+      const video = item.videoInfo || item
+
+      if (video.videoImg && video.videoImg.length) {
+        return video.videoImg[0].url
       }
       return ''
     },
@@ -103,27 +105,28 @@ export default {
     // 播放
     onPlayer(item) {
       const { videoId } = this
-      uni.setStorageSync('video', item)
+      const video = item.videoInfo || item
+      uni.setStorageSync('video', video)
       //#ifdef H5
-      uni.navigateTo({ url: `/pages/video/player?id=${item[videoId]}` })
+      uni.navigateTo({ url: `/pages/video/player?id=${video[videoId]}` })
       //#endif
       //#ifdef APP-PLUS
-      uni.navigateTo({ url: `/pages/video/nplayer?id=${item[videoId]}` })
+      uni.navigateTo({ url: `/pages/video/nplayer?id=${video[videoId]}` })
       //#endif
     },
     // 分享
     shareVideo(item) {
       const { isVip, videoId } = this
 
-      if (item.videoPermission === 2 && !isVip) {
+      const video = item.videoInfo || item
+      if (video.videoPermission === 2 && !isVip) {
         this.$refs.vipMsg.show()
       } else {
         const { userId } = this.$store.state.userInfo
         uni.shareWithSystem({
-          href: `http://123.6.102.119:8053/#/pages/video/player?id=${item[videoId]}&uId=${userId}`
+          href: `http://123.6.102.119:8053/#/pages/video/player?id=${video[videoId]}&uId=${userId}`
         })
       }
-      console.log('🚀 ~ shareVideo ~ item:', item.videoPermission)
     },
     checboxChange(v) {
       const { list } = this
