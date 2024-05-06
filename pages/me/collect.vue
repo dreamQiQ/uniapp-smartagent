@@ -58,7 +58,6 @@ export default {
     },
     async getWatchRecord() {
       const { result } = await collectRecord()
-      console.log('🚀 ~ getWatchRecord ~ result:', result)
       this.videoList = result.map((i) => {
         return {
           ...i.videoInfo,
@@ -100,8 +99,8 @@ export default {
 .history {
   width: 100%;
   height: 100%;
-  overflow: auto;
   padding: 20rpx;
+  box-sizing: border-box;
   .history-header {
     width: 100%;
     height: auto;
@@ -159,7 +158,7 @@ export default {
   }
   .video-list {
     width: 100%;
-    height: calc(100% - 164rpx);
+    height: calc(100% - 204rpx);
   }
 }
 </style>
